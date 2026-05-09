@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:isar/isar.dart';
 
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/models/download_manifest.dart';
@@ -75,11 +76,8 @@ class DownloadController extends StateNotifier<DownloadState> {
 
   Future<void> _loadCompletedDownloads() async {
     final isar = _ref.read(isarProvider);
-    // Isar 3.x defines findAll() on each terminal QueryBuilder state via separate
-    // extensions (QAfterWhere, QAfterFilterCondition, etc.). The old analyzer
-    // (5.x bundled with this SDK) fails to resolve these; the code compiles fine.
-    // ignore: undefined_method
-    final all = await isar.downloadManifests.where().anyId().findAll();
+    // .where().findAll() is the standard Isar 3.x way to fetch all records.
+    final all = await isar.downloadManifests.where().findAll();
     final manifests = all.where((m) => m.isCompleted).toList();
 
     final statuses = <String, DownloadStatus>{};
