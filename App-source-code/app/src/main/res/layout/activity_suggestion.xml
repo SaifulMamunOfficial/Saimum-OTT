@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bg_page"
+    android:background="?nsBackground"
+    android:fitsSystemWindows="true">
+
+    <!-- Modern App Bar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?nsBackground"
+        android:elevation="@dimen/_1sdp"
+        app:elevation="@dimen/_1sdp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?nsBackground"
+            app:titleTextColor="?nsBackgroundDark"
+            app:navigationIconTint="?nsBackgroundDark"
+            app:navigationIcon="@drawable/ic_back_modern"
+            app:title="@string/suggestion"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content -->
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- Content Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="@dimen/_12sdp"
+                android:paddingBottom="@dimen/_8sdp"
+                android:gravity="center_vertical">
+
+                <!-- Compact Header Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    app:cardCornerRadius="@dimen/_12sdp"
+                    app:cardElevation="@dimen/_2sdp"
+                    app:cardBackgroundColor="?nsBackground"
+                    app:strokeWidth="@dimen/_1sdp"
+                    app:strokeColor="?nsBorder">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/_12sdp"
+                        android:gravity="center_vertical">
+
+                        <!-- Small Suggestion Icon -->
+                        <com.google.android.material.card.MaterialCardView
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            app:cardCornerRadius="@dimen/_20sdp"
+                            app:cardElevation="@dimen/_2sdp"
+                            app:cardBackgroundColor="?colorPrimary">
+
+                            <ImageView
+                                android:layout_width="@dimen/_20sdp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_feedback"
+                                app:tint="@color/white"
+                                android:contentDescription="@string/todo" />
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="@dimen/_12sdp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Share Your Feedback"
+                                android:textColor="?nsTitle"
+                                android:textSize="@dimen/_14ssp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Help us improve"
+                                android:textColor="?nsTitleSub"
+                                android:textSize="@dimen/_10ssp"
+                                android:alpha="0.8"
+                                android:layout_marginTop="@dimen/_2sdp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Title & Description Combined Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_2sdp"
+                    app:cardBackgroundColor="?nsBackground"
+                    app:strokeWidth="@dimen/_1sdp"
+                    app:strokeColor="?nsBorder">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_12sdp">
+
+                        <!-- Title Input -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Title"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="@dimen/_4sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_12sdp"
+                            app:boxBackgroundMode="filled"
+                            app:boxBackgroundColor="?nsBackgroundSub"
+                            app:boxCornerRadiusTopStart="@dimen/_6sdp"
+                            app:boxCornerRadiusTopEnd="@dimen/_6sdp"
+                            app:boxCornerRadiusBottomStart="@dimen/_6sdp"
+                            app:boxCornerRadiusBottomEnd="@dimen/_6sdp"
+                            app:boxStrokeColor="?colorPrimary"
+                            app:hintTextColor="?nsTitleSub"
+                            app:hintEnabled="false">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/enter_your_title_here_suggestion"
+                                android:inputType="text"
+                                android:textSize="@dimen/_12ssp"
+                                android:textColor="?nsTitle"
+                                android:textColorHint="?nsTitleSub"
+                                android:padding="@dimen/_8sdp"
+                                android:importantForAutofill="no"
+                                android:imeOptions="actionNext" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <!-- Description Input -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Description"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="@dimen/_4sdp" />
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:boxBackgroundMode="filled"
+                            app:boxBackgroundColor="?nsBackgroundSub"
+                            app:boxCornerRadiusTopStart="@dimen/_6sdp"
+                            app:boxCornerRadiusTopEnd="@dimen/_6sdp"
+                            app:boxCornerRadiusBottomStart="@dimen/_6sdp"
+                            app:boxCornerRadiusBottomEnd="@dimen/_6sdp"
+                            app:boxStrokeColor="?colorPrimary"
+                            app:hintTextColor="?nsTitleSub"
+                            app:hintEnabled="false">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/et_description"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="@string/enter_your_description_here_suggestion"
+                                android:gravity="top"
+                                android:maxLines="4"
+                                android:minLines="3"
+                                android:textSize="@dimen/_12ssp"
+                                android:textColor="?nsTitle"
+                                android:textColorHint="?nsTitleSub"
+                                android:padding="@dimen/_8sdp"
+                                android:importantForAutofill="no"
+                                android:inputType="textMultiLine|textCapSentences" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Image Upload Card -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_12sdp"
+                    app:cardCornerRadius="@dimen/_10sdp"
+                    app:cardElevation="@dimen/_2sdp"
+                    app:cardBackgroundColor="?nsBackground"
+                    app:strokeWidth="@dimen/_1sdp"
+                    app:strokeColor="?nsBorder">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_12sdp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/select_image"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_12ssp"
+                            android:textStyle="bold"
+                            android:layout_marginBottom="@dimen/_8sdp" />
+
+                        <!-- Upload Section Only -->
+                        <LinearLayout
+                            android:id="@+id/ll_sugg"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_50sdp"
+                            android:orientation="horizontal"
+                            android:gravity="center"
+                            android:padding="@dimen/_8sdp"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:foreground="?attr/selectableItemBackground">
+
+                            <com.google.android.material.card.MaterialCardView
+                                android:layout_width="@dimen/_24sdp"
+                                android:layout_height="@dimen/_24sdp"
+                                android:layout_marginEnd="@dimen/_6sdp"
+                                app:cardCornerRadius="@dimen/_12sdp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="?colorPrimary">
+
+                                <ImageView
+                                    android:layout_width="@dimen/_12sdp"
+                                    android:layout_height="@dimen/_12sdp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_camera"
+                                    app:tint="@color/white"
+                                    android:contentDescription="@string/todo" />
+
+                            </com.google.android.material.card.MaterialCardView>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/select_image"
+                                android:textColor="?nsTitle"
+                                android:textSize="@dimen/_11ssp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <!-- Hidden Image View for functionality -->
+                        <androidx.nemosofts.material.ImageHelperView
+                            android:id="@+id/iv_sugg"
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:visibility="gone" />
+
+                    </LinearLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+            </LinearLayout>
+
+            <!-- Bottom Submit Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="@dimen/_12sdp"
+                android:paddingTop="@dimen/_8sdp">
+
+                <!-- Submit Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_sugg_submit"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_48sdp"
+                    android:text="@string/submit"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_14ssp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.02"
+                    app:backgroundTint="?colorPrimary"
+                    app:cornerRadius="@dimen/_12sdp"
+                    app:elevation="@dimen/_4sdp"
+                    app:rippleColor="@color/white"
+                    android:layout_marginBottom="@dimen/_8sdp" />
+
+                <!-- Ad View Container -->
+                <LinearLayout
+                    android:id="@+id/ll_adView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="?nsBackground"
+                    android:visibility="gone" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

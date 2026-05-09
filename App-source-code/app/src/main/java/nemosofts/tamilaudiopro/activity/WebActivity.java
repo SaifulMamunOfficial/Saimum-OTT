@@ -1,0 +1,161 @@
+package nemosofts.tamilaudiopro.activity;
+
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+
+import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.nemosofts.AppCompatActivity;
+import androidx.nemosofts.utils.NetworkUtils;
+
+import java.util.Objects;
+
+import com.saimum.saimummusic.R;
+import nemosofts.tamilaudiopro.utils.IfSupported;
+import nemosofts.tamilaudiopro.utils.helper.Helper;
+
+public class WebActivity extends AppCompatActivity {
+
+    private WebView webView;
+    private FrameLayout frameLayout;
+    private String webWRL = "";
+
+    OnBackPressedCallback callback = new OnBackPressedCallback(false) {
+        @Override
+        public void handleOnBackPressed() {
+            goBack();
+        }
+    };
+
+    @SuppressLint("SetJavaScriptEnabled")
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        IfSupported.isRTL(this);
+        IfSupported.isScreenshot(this);
+        EdgeToEdge.enable(this);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.bg_page), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+
+        Intent intent = getIntent();
+        webWRL = intent.getStringExtra("web_url");
+        String title = intent.getStringExtra("page_title");
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+        }
+        toolbar.setNavigationOnClickListener(view -> goBack());
+        setTitle(title);
+
+        final ProgressBar pb = findViewById(R.id.pb_web);
+        frameLayout = findViewById(R.id.fl_empty);
+        webView = findViewById(R.id.web);
+        webView.setWebViewClient(new MyWebViewClient());
+        webView.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int progress) {
+                pb.setProgress(progress);
+                if (progress == 100) {
+                    pb.setVisibility(View.GONE);
+                } else {
+                    pb.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+
+        loadData();
+
+        LinearLayout adView = findViewById(R.id.ll_adView);
+        new Helper(this).showBannerAd(adView,"");
+
+        getOnBackPressedDispatcher().addCallback(this, callback);
+        callback.setEnabled(true);
+    }
+
+    private void loadData() {
+        if (NetworkUtils.isConnected(this)) {
+            webView.setVisibility(View.VISIBLE);
+            webView.loadUrl(Objects.requireNonNull(webWRL));
+            frameLayout.setVisibility(View.GONE);
+        } else {
+            webView.setVisibility(View.GONE);
+            frameLayout.setVisibility(View.VISIBLE);
+
+            frameLayout.removeAllViews();
+            LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            @SuppressLint("InflateParams") View myView = inflater.inflate(R.layout.row_empty, null);
+
+            TextView textView = myView.findViewById(R.id.tv_empty_msg);
+            textView.setText(getString(R.string.error_internet_not_connected));
+
+            myView.findViewById(R.id.ll_empty_try).setOnClickListener(v -> loadData());
+
+            frameLayout.addView(myView);
+        }
+    }
+
+    private static class MyWebViewClient extends WebViewClient {
+
+        @Override
+        public boolean shouldOverrideUrlLoading(@NonNull WebView view, @NonNull WebResourceRequest request) {
+            view.loadUrl(request.getUrl().toString());
+            return true;
+        }
+    }
+
+    private void goBack() {
+        if (webView == null){
+            finish();
+            return;
+        }
+
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            finish();
+        }
+    }
+
+    @Override
+    public int setContentViewID() {
+        return R.layout.activity_web;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+        if (menuItem.getItemId() == android.R.id.home) {
+            goBack();
+        } else {
+            return super.onOptionsItemSelected(menuItem);
+        }
+        return true;
+    }
+}

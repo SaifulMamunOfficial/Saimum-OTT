@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Network Permission -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <!-- Storage Permission -->
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <!-- Advertising Permission -->
+    <uses-permission android:name="android.permission.Ad_ID" />
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" />
+
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- In app purchase Permission -->
+    <uses-permission android:name="com.android.vending.BILLING" />
+
+    <application
+        android:name="nemosofts.tamilaudiopro.activity.MyApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:requestLegacyExternalStorage="true"
+        android:supportsRtl="true"
+        android:theme="@style/Nemosofts.ThemeEngine.DayNight"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="n">
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.LauncherActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.MainActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.NSoftsPlayerActivity"/>
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SignInActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SignUpActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.ForgotPasswordActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.ProfileEditActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.WebActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.AboutUsActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.NotificationActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.AudioByIDActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.AudioByDBPlaylistActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.EqualizerActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.QueueActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.DownloadActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.OfflineMusicActivity"
+            android:exported="false"
+            android:label="@string/title_activity_main2"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.OfflinePlaylistBySongActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.OfflineSongByActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SelectSongActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.OfflinePlaylistAddActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.DriveModeActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.NewsActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.NewsWebActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.AlbumsByCatActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SuggestionActivity"
+            android:exported="false"
+            android:windowSoftInputMode="adjustPan|adjustNothing" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SettingActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SettingNowPlayingActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SettingQualityActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.SettingDriveModeActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.DialogActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.CommentActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.BillingSubscribeActivity"
+            android:exported="false" />
+        <activity
+            android:name="nemosofts.tamilaudiopro.activity.BillingConnectorActivity"
+            android:exported="false" />
+        <activity android:name="nemosofts.tamilaudiopro.activity.MiniPlayer"
+            android:theme="@style/Theme.MiniPlayer"
+            android:launchMode="singleTask"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:windowSoftInputMode="adjustPan|adjustNothing"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.APP_MUSIC" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="content" />
+                <data android:mimeType="audio/*" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name="nemosofts.tamilaudiopro.activity.PlayerService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
+        <service
+            android:name="nemosofts.tamilaudiopro.activity.DownloadService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+        <receiver
+            android:name="nemosofts.tamilaudiopro.utils.receiver.MediaButtonIntentReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MEDIA_BUTTON" />
+            </intent-filter>
+        </receiver>
+
+        <!-- Mobile Advertising -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="@string/admob_app_id" />
+        <activity
+            android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
+        <meta-data
+            android:name="com.startapp.sdk.MIXED_AUDIENCE"
+            android:value="true"/>
+        <meta-data
+            android:name="applovin.sdk.key"
+            android:value="@string/applovin_id" />
+        <meta-data
+            android:name="com.wortise.ads.utm"
+            android:value="nsft" />
+        <meta-data
+            android:name="firebase_crashlytics_collection_enabled"
+            android:value="false" />
+        <activity android:name="com.facebook.ads.AudienceNetworkActivity"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <activity
+            android:name="com.ironsource.sdk.controller.ControllerActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.ironsource.sdk.controller.InterstitialActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.ironsource.sdk.controller.OpenUrlActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true" />
+        <activity
+            android:name="com.ironsource.mediationsdk.testSuite.TestSuiteActivity"
+            android:configChanges="orientation|screenSize"
+            android:hardwareAccelerated="true" />
+        <provider
+            android:name="com.ironsource.lifecycle.IronsourceLifecycleProvider"
+            android:authorities="${applicationId}.IronsourceLifecycleProvider" />
+    </application>
+
+</manifest>

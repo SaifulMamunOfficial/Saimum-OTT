@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ProfileEditActivity"
+    android:id="@+id/bg_page"
+    android:background="?nsBackground"
+    android:fitsSystemWindows="true">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?nsBackground"
+        android:elevation="0dp"
+        app:elevation="0dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?nsBackground"
+            app:titleTextColor="?nsBackgroundDark"
+            app:navigationIconTint="?nsBackgroundDark"
+            app:navigationIcon="@drawable/ic_close"
+            app:title="@string/edit_account"
+            app:titleCentered="true"
+            android:elevation="0dp" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="none"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/_80sdp">
+
+            <!-- Profile Image Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_16sdp"
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardElevation="@dimen/_4sdp"
+                app:cardBackgroundColor="?nsBackground"
+                app:strokeWidth="@dimen/_1sdp"
+                app:strokeColor="?nsBorder">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/_24sdp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_profile_edit"
+                        android:layout_width="@dimen/_140sdp"
+                        android:layout_height="@dimen/_140sdp">
+
+                        <androidx.nemosofts.material.ImageHelperView
+                            android:id="@+id/iv_profile_edit"
+                            android:layout_width="@dimen/_120sdp"
+                            android:layout_height="@dimen/_120sdp"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/user_photo"
+                            app:hv_border_color="?nsBackgroundSub"
+                            app:hv_border_width="@dimen/_2sdp"
+                            app:hv_corner_radius="@dimen/_60sdp"
+                            android:elevation="@dimen/_2sdp" />
+
+                        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                            android:id="@+id/fab_camera"
+                            android:layout_width="@dimen/_40sdp"
+                            android:layout_height="@dimen/_40sdp"
+                            android:layout_alignEnd="@+id/iv_profile_edit"
+                            android:layout_alignBottom="@+id/iv_profile_edit"
+                            android:layout_marginEnd="@dimen/_5sdp"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:src="@drawable/ic_camera"
+                            app:backgroundTint="?colorPrimary"
+                            app:tint="@color/white"
+                            app:fabSize="mini"
+                            app:elevation="@dimen/_6sdp"
+                            android:contentDescription="@string/todo" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:text="@string/tap_to_change_photo"
+                        android:textColor="?nsTitleSub"
+                        android:textSize="@dimen/_10ssp"
+                        android:alpha="0.7" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Personal Information Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardElevation="@dimen/_4sdp"
+                app:cardBackgroundColor="?nsBackground"
+                app:strokeWidth="@dimen/_1sdp"
+                app:strokeColor="?nsBorder">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_20sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/personal_information"
+                        android:textColor="?nsTitle"
+                        android:textSize="@dimen/_14ssp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/_16sdp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        app:boxStrokeColor="?colorPrimary"
+                        app:boxStrokeWidth="@dimen/_1sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_12sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomEnd="@dimen/_12sdp"
+                        app:hintTextColor="?nsBackgroundDark"
+                        app:startIconDrawable="@drawable/ic_person"
+                        app:startIconTint="?nsBackgroundDark"
+                        app:hintAnimationEnabled="true"
+                        app:expandedHintEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_profedit_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/full_name"
+                            android:inputType="textPersonName|textCapWords"
+                            android:maxLines="1"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_13ssp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:paddingEnd="@dimen/_4sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        app:boxStrokeColor="?colorPrimary"
+                        app:boxStrokeWidth="@dimen/_1sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_12sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomEnd="@dimen/_12sdp"
+                        app:hintTextColor="?nsBackgroundDark"
+                        app:startIconDrawable="@drawable/ic_phone"
+                        app:startIconTint="?nsBackgroundDark"
+                        app:hintAnimationEnabled="true"
+                        app:expandedHintEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_profedit_phone"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/telephone_number"
+                            android:inputType="phone"
+                            android:maxLines="1"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_13ssp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:paddingEnd="@dimen/_4sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Account Security Section -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                app:cardCornerRadius="@dimen/_16sdp"
+                app:cardElevation="@dimen/_4sdp"
+                app:cardBackgroundColor="?nsBackground"
+                app:strokeWidth="@dimen/_1sdp"
+                app:strokeColor="?nsBorder">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_20sdp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/account_security"
+                        android:textColor="?nsTitle"
+                        android:textSize="@dimen/_14ssp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="@dimen/_16sdp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        app:boxStrokeColor="?colorPrimary"
+                        app:boxStrokeWidth="@dimen/_1sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_12sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomEnd="@dimen/_12sdp"
+                        app:hintTextColor="?nsBackgroundDark"
+                        app:startIconDrawable="@drawable/ic_email"
+                        app:startIconTint="?nsBackgroundDark"
+                        app:hintAnimationEnabled="true"
+                        app:expandedHintEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_profedit_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/email_id"
+                            android:inputType="textEmailAddress"
+                            android:maxLines="1"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_13ssp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:paddingEnd="@dimen/_4sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_12sdp"
+                        app:boxStrokeColor="?colorPrimary"
+                        app:boxStrokeWidth="@dimen/_1sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_12sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomEnd="@dimen/_12sdp"
+                        app:hintTextColor="?nsBackgroundDark"
+                        app:startIconDrawable="@drawable/ic_lock"
+                        app:startIconTint="?nsBackgroundDark"
+                        app:endIconMode="password_toggle"
+                        app:endIconTint="?nsBackgroundDark"
+                        app:hintAnimationEnabled="true"
+                        app:expandedHintEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_profedit_password"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_13ssp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:paddingEnd="@dimen/_4sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/til_confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:boxStrokeColor="?colorPrimary"
+                        app:boxStrokeWidth="@dimen/_1sdp"
+                        app:boxCornerRadiusTopStart="@dimen/_12sdp"
+                        app:boxCornerRadiusTopEnd="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomStart="@dimen/_12sdp"
+                        app:boxCornerRadiusBottomEnd="@dimen/_12sdp"
+                        app:hintTextColor="?nsBackgroundDark"
+                        app:startIconDrawable="@drawable/ic_lock"
+                        app:startIconTint="?nsBackgroundDark"
+                        app:endIconMode="password_toggle"
+                        app:endIconTint="?nsBackgroundDark"
+                        app:hintAnimationEnabled="true"
+                        app:expandedHintEnabled="true"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editText_profedit_cpassword"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/confirm_password"
+                            android:inputType="textPassword"
+                            android:maxLines="1"
+                            android:textColor="?nsTitle"
+                            android:textSize="@dimen/_13ssp"
+                            android:paddingStart="@dimen/_4sdp"
+                            android:paddingEnd="@dimen/_4sdp" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Floating Action Button for Save -->
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/_16sdp"
+        android:text="@string/save_changes"
+        android:textColor="@color/white"
+        android:textSize="@dimen/_12ssp"
+        app:icon="@drawable/ic_save"
+        app:iconTint="@color/white"
+        app:backgroundTint="?colorPrimary"
+        app:elevation="@dimen/_8sdp"
+        android:contentDescription="@string/save_changes" />
+
+    <!-- Ad View Container -->
+    <LinearLayout
+        android:id="@+id/ll_adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="?nsBackground"
+        android:orientation="vertical"
+        android:visibility="gone" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

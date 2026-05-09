@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_80sdp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="@dimen/_5sdp"
+    android:orientation="vertical">
+
+    <nemosofts.tamilaudiopro.view.WidthFitSquareLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.nemosofts.material.ImageHelperView
+            app:hv_oval="true"
+            android:id="@+id/iv_artis"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:hv_border_color="?nsBorder"
+            app:hv_border_width="@dimen/_2sdp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/placeholder_artist_light"/>
+
+    </nemosofts.tamilaudiopro.view.WidthFitSquareLayout>
+
+    <TextView
+        android:id="@+id/tv_artis"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/_5sdp"
+        android:text="@string/app_name"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textColor="?nsBackgroundDark"/>
+
+</LinearLayout>

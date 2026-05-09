@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/_110sdp"
+    android:background="@drawable/bg_trending_card"
+    android:layout_height="@dimen/_110sdp"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginStart="@dimen/_10sdp"
+    android:id="@+id/rl_recent">
+
+    <androidx.nemosofts.material.ImageHelperView
+        android:padding="@dimen/_1sdp"
+        android:id="@+id/iv_recently"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/album" />
+
+    <androidx.nemosofts.material.EqualizerView
+        android:id="@+id/equalizer_recent"
+        android:layout_width="@dimen/_20sdp"
+        android:layout_height="@dimen/_20sdp"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:animDuration="3000"
+        app:foregroundColor="?nsPrimary" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="@dimen/_4sdp"
+        android:layout_marginTop="@dimen/_4sdp"
+        android:layout_marginEnd="@dimen/_4sdp"
+        android:layout_marginBottom="@dimen/_4sdp"
+        android:background="@drawable/bg_re_title"
+        android:backgroundTint="#8C000000"
+        android:orientation="horizontal"
+        android:padding="@dimen/_4sdp">
+
+        <TextView
+            android:gravity="center_vertical"
+            android:id="@+id/tv_recent_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="5"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="@string/app_name"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_10ssp" />
+
+        <ImageView
+            android:id="@+id/iv_play_view"
+            android:layout_width="@dimen/_15sdp"
+            android:layout_height="@dimen/_15sdp"
+            android:layout_gravity="center"
+            android:background="@drawable/abs_history_playlist"
+            android:contentDescription="@string/todo"
+            android:padding="@dimen/_1sdp"
+            android:src="@drawable/ic_play" />
+
+    </LinearLayout>
+
+</RelativeLayout>

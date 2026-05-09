@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="@string/nav_home" />
+
+    <item
+        android:id="@+id/nav_categories"
+        android:icon="@drawable/ic_folders"
+        android:title="@string/categories" />
+
+    <item
+        android:id="@+id/nav_artist"
+        android:icon="@drawable/ic_artist"
+        android:title="@string/artist" />
+
+    <item
+        android:id="@+id/nav_albums"
+        android:icon="@drawable/ic_album"
+        android:title="@string/albums" />
+
+    <item
+        android:id="@+id/nav_recently"
+        android:icon="@drawable/ic_history"
+        android:title="@string/recently" />
+
+    <item
+        android:id="@+id/nav_latest"
+        android:icon="@drawable/ic_audio_track"
+        android:title="@string/all_songs" />
+
+    <item
+        android:id="@+id/nav_playlist"
+        android:icon="@drawable/ic_list_check"
+        android:title="@string/playlist" />
+
+    <item
+        android:id="@+id/nav_myplaylist"
+        android:icon="@drawable/ic_list_check"
+        android:title="@string/myplaylist" />
+
+    <item
+        android:id="@+id/nav_music_library"
+        android:icon="@drawable/ic_library_music"
+        android:title="@string/music_library"
+        android:checkable="false"/>
+
+    <item
+        android:id="@+id/nav_fav"
+        android:icon="@drawable/ic_heart_line"
+        android:title="@string/favourite" />
+
+    <item
+        android:id="@+id/nav_downloads"
+        android:icon="@drawable/ic_audio_download"
+        android:title="@string/downloads" />
+
+    <item
+        android:id="@+id/nav_news"
+        android:icon="@drawable/ic_todo"
+        android:title="@string/news" />
+
+    <item
+        android:id="@+id/nav_suggest"
+        android:icon="@drawable/ic_function_add"
+        android:title="@string/suggestion" />
+
+    <item
+        android:id="@+id/nav_subscription"
+        android:icon="@drawable/ic_vip_diamond"
+        android:title="@string/subscription_plan" />
+
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/nav_profile" />
+
+    <item
+        android:id="@+id/nav_settings"
+        android:icon="@drawable/ic_setting"
+        android:title="@string/nav_settings" />
+
+    <item
+        android:id="@+id/nav_login"
+        android:icon="@drawable/ic_login"
+        android:title="@string/login" />
+
+</menu>

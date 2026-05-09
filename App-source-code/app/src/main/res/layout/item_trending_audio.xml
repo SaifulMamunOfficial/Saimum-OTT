@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/_110sdp"
+    android:background="@drawable/bg_trending_card"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/_5sdp"
+    android:layout_marginStart="@dimen/_10sdp">
+
+    <LinearLayout
+        android:layout_margin="@dimen/_1sdp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_110sdp">
+
+            <androidx.nemosofts.material.ImageHelperView
+                android:id="@+id/iv_recent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/album" />
+
+            <ImageView
+                android:id="@+id/tv_trending"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:src="@drawable/ic_trending"
+                android:contentDescription="@string/todo" />
+
+            <ImageView
+                android:id="@+id/iv_play_view_2"
+                android:layout_width="@dimen/_40sdp"
+                android:layout_height="@dimen/_40sdp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/abs_history_playlist"
+                android:backgroundTint="#4B000000"
+                android:contentDescription="@string/todo" />
+
+            <ImageView
+                android:id="@+id/iv_play_view"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="@dimen/_35sdp"
+                android:padding="@dimen/_2sdp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_play"
+                android:background="@drawable/abs_history_playlist"
+                android:backgroundTint="#4B000000"
+                android:contentDescription="@string/todo" />
+
+            <androidx.nemosofts.material.EqualizerView
+                android:id="@+id/equalizer_view"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:animDuration="3000"
+                app:foregroundColor="?nsPrimary" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_recent_more"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_25sdp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/bar_selector"
+                android:layout_margin="@dimen/_2sdp"
+                android:padding="@dimen/_4sdp"
+                android:src="@drawable/ic_more"
+                app:tint="?nsTitleSub"
+                tools:ignore="ContentDescription" />
+
+            <TextView
+                android:id="@+id/tv_recent_song"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_toStartOf="@+id/iv_recent_more"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsPrimary"
+                android:textSize="@dimen/_8ssp" />
+
+            <TextView
+                android:id="@+id/tv_recent_cat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_recent_song"
+                android:layout_marginStart="@dimen/_5sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_toStartOf="@+id/iv_recent_more"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsPrimary"
+                android:textSize="@dimen/_10sdp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

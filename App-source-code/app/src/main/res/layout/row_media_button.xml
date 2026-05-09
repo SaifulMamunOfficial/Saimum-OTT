@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="@dimen/_2sdp"
+    android:paddingEnd="@dimen/_2sdp">
+
+    <!-- Shuffle Button -->
+    <ImageView
+        android:id="@+id/iv_music_shuffle"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:padding="@dimen/_6sdp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_shuffle"
+        app:tint="?nsTitleSub"
+        android:background="@drawable/bar_selector"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_music_previous"
+        app:layout_constraintEnd_toStartOf="@+id/iv_music_previous"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_music_previous"/>
+
+    <!-- Previous Button -->
+    <ImageView
+        android:id="@+id/iv_music_previous"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:padding="@dimen/_6sdp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_skip_previous"
+        app:tint="?nsBackgroundDark"
+        android:background="@drawable/bar_selector"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_music_play"
+        app:layout_constraintEnd_toStartOf="@+id/iv_music_play"
+        app:layout_constraintStart_toEndOf="@+id/iv_music_shuffle"
+        app:layout_constraintTop_toTopOf="@+id/iv_music_play"/>
+
+    <!-- Play/Pause Button (Main Action) -->
+    <androidx.nemosofts.material.PlayPauseButton
+        android:id="@+id/iv_music_play"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        android:clickable="true"
+        android:focusable="true"
+        android:stateListAnimator="@drawable/button_elevation"
+        app:fill_color="@color/white"
+        app:pause_bg="?nsPrimary"
+        app:play_bg="?nsPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_music_next"
+        app:layout_constraintStart_toEndOf="@+id/iv_music_previous"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <!-- Loading Indicator (Hidden by default) -->
+    <RelativeLayout
+        android:translationZ="10dp"
+        android:id="@+id/rl_music_loading"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:layout_marginTop="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_2sdp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_music_next"
+        app:layout_constraintStart_toEndOf="@+id/iv_music_previous"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:padding="@dimen/_6sdp"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/abs_history_playlist"
+            android:backgroundTint="?nsPrimary"
+            android:src="@drawable/ic_close_white"
+            android:contentDescription="@string/todo" />
+
+        <ProgressBar
+            android:theme="@style/CircularProgressWhite"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:indeterminate="true" />
+
+    </RelativeLayout>
+
+    <!-- Next Button -->
+    <ImageView
+        android:id="@+id/iv_music_next"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:padding="@dimen/_6sdp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_skip_next"
+        app:tint="?nsBackgroundDark"
+        android:background="@drawable/bar_selector"
+        android:contentDescription="@string/todo"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_music_play"
+        app:layout_constraintEnd_toStartOf="@+id/iv_music_repeat"
+        app:layout_constraintStart_toEndOf="@+id/iv_music_play"
+        app:layout_constraintTop_toTopOf="@+id/iv_music_play"/>
+
+    <!-- Repeat Button -->
+    <ImageView
+        android:id="@+id/iv_music_repeat"
+        android:layout_width="@dimen/_32sdp"
+        android:layout_height="@dimen/_32sdp"
+        android:padding="@dimen/_6sdp"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_repeat"
+        app:tint="?nsTitleSub"
+        android:contentDescription="@string/todo"
+        android:background="@drawable/bar_selector"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_music_next"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_music_next"
+        app:layout_constraintTop_toTopOf="@+id/iv_music_next"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

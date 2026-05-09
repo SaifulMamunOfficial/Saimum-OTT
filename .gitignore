@@ -1,0 +1,25 @@
+# Large files
+*.rar
+*.sql
+*.zip
+*.tar.gz
+
+# Flutter specific
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/.idea/
+**/*.iml
+**/.vscode/
+
+# Logs
+*.log
+
+# Backend specific (if any)
+Laravel-Backend-Code/vendor/
+Laravel-Backend-Code/images/
+Laravel-Backend-Code/assets/
+cgi-bin/

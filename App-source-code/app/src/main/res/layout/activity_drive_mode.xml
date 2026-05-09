@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/bg_page"
+    tools:context="nemosofts.tamilaudiopro.activity.DriveModeActivity"
+    android:background="@color/black">
+
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/iv_drive_mode"
+        android:src="@drawable/placeholder_song_night"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:alpha="0.7"
+        android:contentDescription="@string/todo" />
+
+    <!-- Subtle Dark Overlay -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#50000000" />
+
+    <!-- Snow Fall Effect -->
+    <com.jetradarmobile.snowfall.SnowfallView
+        android:visibility="gone"
+        android:id="@+id/drive_snow_fall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:snowflakesNum="50"
+        app:snowflakeSpeedMax="2" />
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/_20sdp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="@dimen/_16sdp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/iv_drive_mode_close"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_close_white"
+            android:background="@drawable/circle_bg_transparent"
+            android:padding="@dimen/_8sdp"
+            app:tint="@color/white"
+            android:contentDescription="@string/todo" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/_24sdp"
+                android:layout_height="@dimen/_24sdp"
+                android:src="@drawable/ic_roadster"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:text="@string/drive_mode"
+                android:textColor="@color/white"
+                android:textSize="@dimen/_14ssp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/iv_drive_mode_fav"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:src="@drawable/ic_favorite_border"
+            android:background="@drawable/circle_bg_transparent"
+            android:padding="@dimen/_8sdp"
+            app:tint="@color/white"
+            android:contentDescription="@string/todo" />
+
+    </LinearLayout>
+
+    <!-- Song Title Section -->
+    <LinearLayout
+        android:id="@+id/song_info"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/top_bar"
+        android:layout_marginTop="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_title_drive_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/app_name"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_24ssp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:shadowColor="#80000000"
+            android:shadowDx="0"
+            android:shadowDy="2"
+            android:shadowRadius="4" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:text="@string/now_playing"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_14ssp"
+            android:alpha="0.8" />
+
+    </LinearLayout>
+
+    <!-- Music Controls -->
+    <LinearLayout
+        android:id="@+id/music_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        android:orientation="vertical">
+
+        <!-- Progress Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="@dimen/_32sdp">
+
+            <androidx.appcompat.widget.AppCompatSeekBar
+                android:id="@+id/seekbar_music"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_12sdp"
+                android:clickable="true"
+                android:focusable="true"
+                android:maxHeight="@dimen/_4sdp"
+                android:progressDrawable="@drawable/color_progress_seek_drive"
+                android:thumb="@drawable/switch_thumb_material"
+                android:thumbTint="@color/white" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_music_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_placeholder"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_music_total_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/time_placeholder"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/_13ssp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Main Player Controls -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/_24sdp">
+
+            <ImageView
+                android:id="@+id/iv_music_previous"
+                android:layout_width="@dimen/_56sdp"
+                android:layout_height="@dimen/_56sdp"
+                android:layout_marginEnd="@dimen/_24sdp"
+                android:src="@drawable/ic_skip_previous"
+                android:background="@drawable/circle_bg_white_trans"
+                android:padding="@dimen/_14sdp"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_music_play"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:src="@drawable/ic_play"
+                    android:background="@drawable/circle_bg_primary"
+                    android:padding="@dimen/_20sdp"
+                    app:tint="@color/white"
+                    android:elevation="@dimen/_4sdp"
+                    android:contentDescription="@string/todo" />
+
+                <ProgressBar
+                    android:visibility="gone"
+                    android:id="@+id/pb_music_loading"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    android:indeterminate="true"
+                    android:indeterminateTint="@color/white" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/iv_music_next"
+                android:layout_width="@dimen/_56sdp"
+                android:layout_height="@dimen/_56sdp"
+                android:layout_marginStart="@dimen/_24sdp"
+                android:src="@drawable/ic_skip_next"
+                android:background="@drawable/circle_bg_white_trans"
+                android:padding="@dimen/_14sdp"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+        </LinearLayout>
+
+        <!-- Secondary Controls -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:id="@+id/iv_music_shuffle"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:layout_marginEnd="@dimen/_32sdp"
+                android:src="@drawable/ic_shuffle"
+                android:background="@drawable/circle_bg_trans_small"
+                android:padding="@dimen/_12sdp"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+            <ImageView
+                android:id="@+id/iv_music_repeat"
+                android:layout_width="@dimen/_48sdp"
+                android:layout_height="@dimen/_48sdp"
+                android:layout_marginStart="@dimen/_32sdp"
+                android:src="@drawable/ic_repeat"
+                android:background="@drawable/circle_bg_trans_small"
+                android:padding="@dimen/_12sdp"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Bottom Swipe Section -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/_40sdp"
+        android:layout_marginHorizontal="@dimen/_24sdp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_16sdp"
+            android:text="@string/safety_lock"
+            android:textColor="@color/white"
+            android:textSize="@dimen/_16ssp"
+            android:textStyle="bold"
+            android:alpha="0.9" />
+
+        <com.nemosofts.swipebutton.SwipeButton
+            android:id="@+id/swipe_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:inner_text="Slide to Unlock"
+            app:inner_text_color="@color/white"
+            app:inner_text_size="16sp"
+            app:inner_text_top_padding="18dp"
+            app:inner_text_bottom_padding="18dp"
+            app:inner_text_background="@drawable/shape_rounded_new"
+            app:button_image_height="60dp"
+            app:button_image_width="100dp"
+            app:button_image_disabled="@drawable/ic_lock_open"
+            app:button_image_enabled="@drawable/ic_lock"
+            app:button_left_padding="20dp"
+            app:button_right_padding="20dp"
+            app:button_top_padding="20dp"
+            app:button_bottom_padding="20dp"
+            app:button_background="@drawable/shape_button_new"
+            app:initial_state="disabled"
+            app:has_activate_state="true" />
+
+    </LinearLayout>
+
+</RelativeLayout>

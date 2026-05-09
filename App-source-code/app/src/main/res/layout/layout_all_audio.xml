@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?nsBackground">
+
+    <RelativeLayout
+        android:id="@+id/rl_audio_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_60sdp"
+        android:paddingTop="0dp"
+        android:paddingBottom="@dimen/_1sdp">
+
+        <RelativeLayout
+            android:id="@+id/rl_audio_img"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:paddingTop="@dimen/_1sdp"
+            android:paddingBottom="@dimen/_1sdp"
+            android:layout_width="@dimen/_60sdp"
+            android:layout_height="match_parent">
+
+            <androidx.nemosofts.material.ImageHelperView
+                android:id="@+id/iv_audio_list"
+                android:layout_width="@dimen/_55sdp"
+                android:layout_height="@dimen/_55sdp"
+                android:layout_margin="@dimen/_3sdp"
+                android:scaleType="fitXY"
+                android:src="@drawable/album"
+                app:hv_corner_radius="@dimen/_3sdp"
+                app:hv_border_width="@dimen/_1sdp"
+                app:hv_border_color="?nsBorder"
+                android:contentDescription="@string/todo"/>
+
+            <androidx.nemosofts.material.EqualizerView
+                android:id="@+id/equalizer_audio_list"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:animDuration="3000"
+                app:foregroundColor="?colorAccent" />
+
+            <ImageView
+                android:id="@+id/iv_audio_list_play"
+                android:layout_width="@dimen/_15sdp"
+                android:layout_height="@dimen/_15sdp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/abs_history_playlist"
+                android:backgroundTint="#4B000000"
+                android:contentDescription="@string/todo"
+                android:padding="@dimen/_1sdp"
+                android:src="@drawable/ic_play" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/ll_audio_list_end"
+            android:layout_toEndOf="@+id/rl_audio_img">
+
+            <TextView
+                android:id="@+id/tv_audio_list_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsTitle"
+                android:textSize="@dimen/_10ssp" />
+
+            <TextView
+                android:id="@+id/tv_audio_list_cat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsTitleSub"
+                android:textSize="@dimen/_8ssp"
+                android:layout_below="@id/tv_audio_list_name"/>
+
+            <LinearLayout
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:layout_below="@+id/tv_audio_list_cat">
+
+                <androidx.appcompat.widget.AppCompatRatingBar
+                    android:id="@+id/rb_audio_list"
+                    style="@style/RatingBar_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:max="5"
+                    android:numStars="5" />
+
+                <TextView
+                    android:id="@+id/tv_audio_list_avg_rate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:background="@drawable/bg_round"
+                    android:backgroundTint="?nsPrimarySub"
+                    android:gravity="center"
+                    android:paddingStart="@dimen/_3sdp"
+                    android:paddingEnd="@dimen/_3sdp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/_8ssp" />
+
+                <ImageView
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:src="@drawable/ic_view"
+                    app:tint="#FF9800"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:contentDescription="@string/todo" />
+
+                <TextView
+                    android:id="@+id/tv_audio_list_views"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="?nsTitleSub"
+                    android:textSize="@dimen/_9ssp"
+                    android:layout_marginStart="@dimen/_1sdp"/>
+
+                <ImageView
+                    android:id="@+id/iv_audio_list_download"
+                    android:layout_width="@dimen/_10sdp"
+                    android:layout_height="@dimen/_10sdp"
+                    android:src="@drawable/ic_down"
+                    app:tint="#E91E63"
+                    android:layout_marginStart="@dimen/_5sdp"
+                    android:contentDescription="@string/todo" />
+
+                <TextView
+                    android:id="@+id/tv_audio_list_download"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="?nsTitleSub"
+                    android:textSize="@dimen/_9ssp"
+                    android:layout_marginStart="@dimen/_1sdp"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_audio_list_end"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/iv_audio_download"
+                android:layout_width="@dimen/_35sdp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_download_cloud_line"
+                android:background="@drawable/bar_selector"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:contentDescription="@string/todo"
+                android:layout_marginEnd="@dimen/_10sdp"/>
+
+            <ImageView
+                android:id="@+id/iv_list_option"
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_more"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginBottom="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:background="@drawable/bar_selector"
+                app:tint="?nsBackgroundDark"
+                android:contentDescription="@string/todo"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/selectableItemBackground"/>
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="?nsBorder"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_native_ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?nsBackground"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:visibility="gone"/>
+
+</LinearLayout>

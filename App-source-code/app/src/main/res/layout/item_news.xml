@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="@dimen/_8sdp"
+    android:layout_marginVertical="@dimen/_4sdp"
+    app:cardCornerRadius="@dimen/_6sdp"
+    app:cardElevation="@dimen/_1sdp"
+    app:cardBackgroundColor="?nsBackground"
+    app:strokeWidth="@dimen/_1sdp"
+    app:strokeColor="?nsBorder"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:id="@+id/ll_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/_10sdp"
+        android:gravity="center_vertical">
+
+        <!-- Simple News Icon (No Image Required) -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="@dimen/_36sdp"
+            android:layout_height="@dimen/_36sdp"
+            app:cardCornerRadius="@dimen/_18sdp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="?colorPrimary">
+
+            <ImageView
+                android:layout_width="@dimen/_18sdp"
+                android:layout_height="@dimen/_18sdp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_notification"
+                app:tint="@color/white"
+                android:contentDescription="@string/todo" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- News Title Content -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="@dimen/_10sdp"
+            android:layout_marginEnd="@dimen/_6sdp">
+
+            <!-- News Title (From Admin Panel) -->
+            <TextView
+                android:id="@+id/tv_title_news"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="সাইমুম শিল্পীগোষ্ঠীর শিল্পী, অভিভাবক সমাবেশ ও সাংস্কৃতিক সন্ধ্যা সম্পন্ন"
+                android:textColor="?nsTitle"
+                android:textSize="@dimen/_13ssp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="0dp" />
+
+        </LinearLayout>
+
+        <!-- Arrow Icon -->
+        <ImageView
+            android:layout_width="@dimen/_18sdp"
+            android:layout_height="@dimen/_18sdp"
+            android:src="@drawable/ic_global"
+            app:tint="?nsTitleSub"
+            android:alpha="0.6"
+            android:contentDescription="@string/todo" />
+
+    </LinearLayout>
+
+    <!-- Hidden fields for adapter compatibility (won't be visible) -->
+    <TextView
+        android:id="@+id/tv_SubTitle_news"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <androidx.nemosofts.material.ImageHelperView
+        android:id="@+id/iv_image_news"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+</com.google.android.material.card.MaterialCardView>

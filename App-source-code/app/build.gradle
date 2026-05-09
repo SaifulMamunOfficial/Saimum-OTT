@@ -1,0 +1,82 @@
+plugins {
+    id 'com.onesignal.androidsdk.onesignal-gradle-plugin'
+    id 'com.android.application'
+    id 'com.google.gms.google-services'
+}
+
+android {
+    namespace 'com.saimum.saimummusic'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId "com.saimum.saimummusic"
+        minSdk 23
+        targetSdk 35
+        versionCode 8
+        versionName "2.6"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'BASE_URL', BASE_URL
+        it.buildConfigField 'String', 'API_NAME', API_NAME
+        it.buildConfigField 'String', 'ENC_KEY', ENC_KEY
+        it.buildConfigField 'String', 'IV', IV
+    }
+
+    compileOptions {
+        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        buildConfig = true
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging true
+        }
+    }
+}
+
+dependencies {
+    implementation libs.bundles.nemosofts
+    implementation libs.bundles.network.security
+    implementation libs.bundles.google
+    implementation(platform(libs.firebase.bom))
+    implementation libs.oneSignal
+    implementation libs.scytale
+    implementation libs.pageindicatorview
+    implementation libs.slidinguppanel
+    implementation libs.eventbus
+    implementation libs.snowfall
+    implementation libs.swipe.button
+    implementation libs.williamchart
+    implementation libs.verticalseekbar
+    implementation libs.number.picker
+    implementation libs.bundles.exoplayer
+    implementation libs.bundles.advertising
+    implementation(libs.wortise) {
+        exclude group: 'com.google.ads.mediation', module: 'mintegral'
+    }
+    implementation libs.billingclient
+    implementation libs.lifecycle.process
+    implementation libs.lifecycle.runtime
+    annotationProcessor libs.lifecycle.compiler
+    implementation fileTree(dir: "libs", include: ["lib-*.aar"])
+}

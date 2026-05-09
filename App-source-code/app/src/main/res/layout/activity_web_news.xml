@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?nsBackground"
+    android:layoutDirection="inherit"
+    tools:context=".activity.NewsWebActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?nsBackground"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/webviewToolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?nsBackground"
+            app:titleTextColor="?nsBackgroundDark"
+            app:contentInsetLeft="0dp"
+            app:navigationIcon="?nsIconBack"
+            app:contentInsetStart="0dp"
+            app:contentInsetStartWithNavigation="0dp"
+            app:popupTheme="@style/AppTheme.PopupOverlay">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/webviewTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:maxLines="1"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="?nsBackgroundDark"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/webviewUrl"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textAlignment="textStart"
+                    android:maxLines="1"
+                    android:layout_gravity="start"
+                    android:layout_marginEnd="10dp"
+                    android:textColor="?nsBackgroundDark"
+                    android:textSize="12sp" />
+
+            </LinearLayout>
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <RelativeLayout
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <WebView
+            android:id="@+id/wv_web"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?nsBackground" />
+
+        <ProgressBar
+            android:id="@+id/pb_web"
+            android:layout_alignParentTop="true"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_marginBottom="-8dp"
+            android:layout_marginTop="-7dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

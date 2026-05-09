@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="?nsBackground">
+
+    <RelativeLayout
+        android:paddingTop="@dimen/_2sdp"
+        android:paddingBottom="@dimen/_2sdp"
+        android:id="@+id/rl_audio_list"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_56sdp">
+
+        <ImageView
+            android:id="@+id/iv_list_move"
+            android:layout_marginStart="@dimen/_5sdp"
+            android:layout_width="@dimen/_42sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:paddingStart="@dimen/_10sdp"
+            android:paddingEnd="@dimen/_10sdp"
+            android:contentDescription="@string/todo"
+            android:padding="5dp"
+            android:src="@drawable/ic_handle"
+            app:tint="?nsTitleSub"
+            android:background="@drawable/bar_selector"/>
+
+        <RelativeLayout
+            android:id="@+id/rl_audio_img"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/_2sdp"
+            android:layout_marginBottom="@dimen/_2sdp"
+            android:layout_toEndOf="@+id/iv_list_move">
+
+            <androidx.nemosofts.material.ImageHelperView
+                android:id="@+id/iv_audio_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/_3sdp"
+                android:layout_marginTop="@dimen/_3sdp"
+                android:layout_marginEnd="@dimen/_3sdp"
+                android:layout_marginBottom="@dimen/_3sdp"
+                android:contentDescription="@string/todo"
+                android:scaleType="fitXY"
+                android:src="@drawable/material_design_default"
+                app:hv_corner_radius="@dimen/_3sdp" />
+
+            <androidx.nemosofts.material.EqualizerView
+                android:id="@+id/equalizer_audio_list"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                app:animDuration="3000"
+                app:foregroundColor="?colorAccent" />
+
+            <ImageView
+                android:id="@+id/iv_audio_list_play"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/abs_history_playlist"
+                android:backgroundTint="#4BFFFFFF"
+                android:contentDescription="@string/todo"
+                android:src="@drawable/ic_play" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:paddingStart="@dimen/_5sdp"
+            android:paddingEnd="@dimen/_5sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/iv_list_option"
+            android:layout_toEndOf="@+id/rl_audio_img">
+
+            <TextView
+                android:id="@+id/tv_audio_list_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsTitle"
+                android:textSize="@dimen/_11ssp" />
+
+            <TextView
+                android:id="@+id/tv_audio_list_cat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_audio_list_name"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:text="@string/app_name"
+                android:textAlignment="viewStart"
+                android:textColor="?nsTitleSub"
+                android:textSize="@dimen/_8ssp" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_list_option"
+            android:layout_width="@dimen/_35sdp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/_10sdp"
+            android:background="@drawable/bar_selector"
+            android:contentDescription="@string/todo"
+            android:padding="@dimen/_9sdp"
+            android:src="@drawable/ic_trash"
+            app:tint="?nsBackgroundDark" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="?nsBorder" />
+
+</LinearLayout>

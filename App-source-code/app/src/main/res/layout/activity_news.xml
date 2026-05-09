@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?nsBackground"
+    android:fitsSystemWindows="true">
+
+    <!-- Modern App Bar with Enhanced Design -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?nsBackground"
+        android:elevation="@dimen/_4sdp"
+        app:elevation="@dimen/_4sdp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar_news"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?nsBackground"
+            app:titleTextColor="?nsBackgroundDark"
+            app:navigationIconTint="?nsBackgroundDark"
+            app:navigationIcon="@drawable/ic_back_modern"
+            app:title="@string/news"
+            app:titleCentered="true" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Main Content with Proper Spacing -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- Enhanced RecyclerView with Better Spacing -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_news"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:clipToPadding="false"
+            android:paddingStart="@dimen/_8sdp"
+            android:paddingTop="@dimen/_8sdp"
+            android:paddingEnd="@dimen/_8sdp"
+            android:paddingBottom="@dimen/_80sdp"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Simple Loading Progress (Compatible with Activity) -->
+        <androidx.nemosofts.material.ProgressBarView
+            android:id="@+id/pb_news"
+            android:layout_width="@dimen/_48sdp"
+            android:layout_height="@dimen/_48sdp"
+            android:visibility="gone"
+            app:pb_color="?colorPrimary"
+            app:pb_colors="@array/progress_colors"
+            app:pb_max_sweep_angle="300"
+            app:pb_min_sweep_angle="10"
+            app:pb_rotation_speed="1.0"
+            app:pb_stroke_width="@dimen/_4sdp"
+            app:pb_sweep_speed="1.0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Enhanced Empty State -->
+        <FrameLayout
+            android:id="@+id/fl_empty_news"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/_32sdp">
+
+                <!-- Empty State Icon -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="@dimen/_100sdp"
+                    android:layout_height="@dimen/_100sdp"
+                    android:layout_marginBottom="@dimen/_24sdp"
+                    app:cardCornerRadius="@dimen/_50sdp"
+                    app:cardElevation="@dimen/_6sdp"
+                    app:cardBackgroundColor="?nsBackgroundSub">
+
+                    <ImageView
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_50sdp"
+                        android:layout_gravity="center"
+                        android:contentDescription="@string/todo"
+                        android:src="@drawable/ic_notification"
+                        app:tint="?nsTitleSub"
+                        android:alpha="0.6" />
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Empty State Text -->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:text="@string/error_no_data_found"
+                    android:textAlignment="center"
+                    android:textColor="?nsTitle"
+                    android:textSize="@dimen/_18ssp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/error_no_data_found"
+                    android:textAlignment="center"
+                    android:textColor="?nsTitleSub"
+                    android:textSize="@dimen/_14ssp"
+                    android:alpha="0.7" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Modern Scroll to Top FAB -->
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_news"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/_16sdp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/ic_keyboard_arrow_up"
+        android:visibility="invisible"
+        app:backgroundTint="?colorPrimary"
+        app:elevation="@dimen/_8sdp"
+        app:fabSize="normal"
+        app:tint="@color/white" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

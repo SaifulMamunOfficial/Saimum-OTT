@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.QueueActivity"
+    android:background="?nsBackground"
+    android:id="@+id/bg_page"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?nsBackground"
+        app:titleTextColor="?nsBackgroundDark"
+        app:navigationIconTint="?nsBackgroundDark"
+        app:navigationIcon="@drawable/ic_close_page"
+        app:title="@string/playing_queue"
+        app:titleCentered="true" />
+
+    <androidx.nemosofts.material.ProgressBarView
+        android:id="@+id/pb_queue"
+        app:pb_color="#FFee44"
+        app:pb_colors="@array/progress_colors"
+        app:pb_max_sweep_angle="300"
+        app:pb_min_sweep_angle="10"
+        app:pb_rotation_speed="1.0"
+        app:pb_stroke_width="@dimen/_4sdp"
+        app:pb_sweep_speed="1.0"
+        android:layout_width="@dimen/_40sdp"
+        android:layout_height="@dimen/_40sdp"
+        android:indeterminate="true"
+        android:layout_centerInParent="true"
+        android:visibility="invisible"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_below="@id/toolbar"
+        android:id="@+id/rv_queue"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

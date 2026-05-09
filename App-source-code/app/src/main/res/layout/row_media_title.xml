@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingTop="@dimen/_5sdp"
+    android:paddingBottom="@dimen/_5sdp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_music_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="22sp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="@style/TextViewNormal"
+        android:textColor="?nsTitle"
+        android:text="@string/app_name"
+        android:layout_marginBottom="@dimen/_5sdp"/>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/tv_music_artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:ellipsize="marquee"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:freezesText="true"
+        android:gravity="center"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:scrollHorizontally="true"
+        android:singleLine="true"
+        android:textSize="18sp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textAppearance="@style/TextViewNormal"
+        android:textColor="?nsTitleSub"
+        android:text="@string/app_name" />
+
+    <androidx.appcompat.widget.AppCompatRatingBar
+        android:id="@+id/rb_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:max="5"
+        android:numStars="5"
+        style="@style/RatingBar_white" />
+
+    <TextView
+        android:id="@+id/tv_music_song_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="?nsTitleSub"
+        android:textSize="13sp"/>
+
+</LinearLayout>

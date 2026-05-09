@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="#14607D8B" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/iv_player_equalizer"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_equalizer"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:id="@+id/view_player_equalizer"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_player_add2playlist"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_function_add"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:id="@+id/view_player_playlist"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B" />
+
+        <ImageView
+            android:id="@+id/iv_player_download"
+            android:visibility="gone"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_audio_download"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:id="@+id/view_player_download"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/iv_player_rate"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_rating"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:id="@+id/view_player_rate"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"  />
+
+        <ImageView
+            android:id="@+id/iv_player_fav"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_heart_line"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:id="@+id/view_player_fav"
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"  />
+
+        <ImageView
+            android:id="@+id/iv_player_queue"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_list_check"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"  />
+
+        <ImageView
+            android:id="@+id/iv_player_lyrics"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_todo"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+        <View
+            android:layout_width="@dimen/_1sdp"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/_5sdp"
+            android:layout_marginTop="@dimen/_5sdp"
+            android:background="#14607D8B"  />
+
+        <ImageView
+            android:id="@+id/iv_player_option"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_32sdp"
+            android:layout_weight="1"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/bar_selector_option"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/ic_more"
+            app:tint="?nsBackgroundDark"
+            android:layout_margin="@dimen/_1sdp"
+            android:padding="@dimen/_6sdp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/_1sdp"
+        android:background="#14607D8B" />
+
+</LinearLayout>
