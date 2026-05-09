@@ -5,7 +5,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
+import '../shared/download_icon_button.dart';
 
 class AlbumDetailPage extends ConsumerWidget {
   final int albumId;
@@ -153,10 +155,10 @@ class _AlbumHeader extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         // Album art
-        Image.network(album.imageUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) =>
-                Container(color: AppColors.surfaceTwo)),
+        SongThumbnail(
+          url: album.imageUrl,
+          fallback: Container(color: AppColors.surfaceTwo),
+        ),
 
         // Gradient overlay
         Container(
@@ -258,9 +260,16 @@ class _TrackTile extends ConsumerWidget {
       subtitle: Text(song.artist,
           style: const TextStyle(
               fontSize: 12, color: AppColors.onSurfaceMuted)),
-      trailing: Text(_fmt(song.duration),
-          style: const TextStyle(
-              fontSize: 12, color: AppColors.onSurfaceMuted)),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DownloadIconButton(song: song),
+          const SizedBox(width: 12),
+          Text(_fmt(song.duration),
+              style: const TextStyle(
+                  fontSize: 12, color: AppColors.onSurfaceMuted)),
+        ],
+      ),
       onTap: () => ref.read(mediaControllerProvider.notifier).play(
             song.audioUrl,
             title: song.title,

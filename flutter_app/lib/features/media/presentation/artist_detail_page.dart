@@ -7,7 +7,9 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
+import '../shared/download_icon_button.dart';
 
 class ArtistDetailPage extends ConsumerWidget {
   final int artistId;
@@ -143,10 +145,10 @@ class _ArtistHeader extends StatelessWidget {
         Positioned.fill(
           child: ImageFiltered(
             imageFilter: ImageFilter.blur(sigmaX: 42, sigmaY: 42),
-            child: Image.network(artist.imageUrl,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) =>
-                    Container(color: AppColors.surfaceTwo)),
+            child: SongThumbnail(
+              url: artist.imageUrl,
+              fallback: Container(color: AppColors.surfaceTwo),
+            ),
           ),
         ),
         // Dark scrim
@@ -190,13 +192,14 @@ class _ArtistHeader extends StatelessWidget {
                     child: SizedBox(
                       width: 96,
                       height: 96,
-                      child: Image.network(artist.imageUrl,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Container(
-                                color: AppColors.surfaceOne,
-                                child: const Icon(Icons.person_rounded,
-                                    color: AppColors.primary, size: 40),
-                              )),
+                      child: SongThumbnail(
+                        url: artist.imageUrl,
+                        fallback: Container(
+                          color: AppColors.surfaceOne,
+                          child: const Icon(Icons.person_rounded,
+                              color: AppColors.primary, size: 40),
+                        ),
+                      ),
                     ),
                   ),
                 ),
@@ -265,8 +268,15 @@ class _ArtistTrackTile extends ConsumerWidget {
       subtitle: Text(song.album ?? '',
           style: const TextStyle(
               fontSize: 12, color: AppColors.onSurfaceMuted)),
-      trailing: const Icon(Icons.play_circle_outline_rounded,
-          color: AppColors.primary, size: 30),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DownloadIconButton(song: song),
+          const SizedBox(width: 8),
+          const Icon(Icons.play_circle_outline_rounded,
+              color: AppColors.primary, size: 30),
+        ],
+      ),
       onTap: () => ref.read(mediaControllerProvider.notifier).play(
             song.audioUrl,
             title: song.title,
@@ -300,12 +310,14 @@ class _AlbumCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
                 child: AspectRatio(
                   aspectRatio: 1,
-                  child: Image.network(album.imageUrl,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, _, _) => Container(
-                          color: AppColors.surfaceTwo,
-                          child: const Icon(Icons.album_rounded,
-                              color: AppColors.primary, size: 32))),
+                  child: SongThumbnail(
+                    url: album.imageUrl,
+                    fallback: Container(
+                      color: AppColors.surfaceTwo,
+                      child: const Icon(Icons.album_rounded,
+                          color: AppColors.primary, size: 32),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 8),

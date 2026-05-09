@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../video/video_player_controller.dart';
 
 // ---------------------------------------------------------------------------
@@ -95,10 +96,9 @@ class _FeaturedBanner extends ConsumerWidget {
             // Thumbnail fills to top (under status bar)
             AspectRatio(
               aspectRatio: 16 / 9,
-              child: Image.network(
-                video.thumb,
-                fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => Container(
+              child: SongThumbnail(
+                url: video.thumb,
+                fallback: Container(
                   color: AppColors.surfaceTwo,
                   child: const Icon(Icons.videocam,
                       size: 56, color: AppColors.onSurfaceMuted),
@@ -289,14 +289,14 @@ class _OttCard extends ConsumerWidget {
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(video.thumb,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, _, _) => Container(
-                                color: AppColors.surfaceTwo,
-                                child: const Icon(Icons.videocam,
-                                    color: AppColors.onSurfaceMuted,
-                                    size: 28),
-                              )),
+                      SongThumbnail(
+                        url: video.thumb,
+                        fallback: Container(
+                          color: AppColors.surfaceTwo,
+                          child: const Icon(Icons.videocam,
+                              color: AppColors.onSurfaceMuted, size: 28),
+                        ),
+                      ),
                       Center(
                         child: Container(
                           width: 36,

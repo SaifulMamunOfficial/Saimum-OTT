@@ -8,9 +8,12 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'app_shell.dart';
+import 'core/models/app_log.dart';
 import 'core/models/download_manifest.dart';
 import 'core/models/playback_snapshot.dart';
 import 'core/utils/migration_service.dart';
+import 'core/utils/telemetry_service.dart';
+import 'core/widgets/error_boundary.dart';
 import 'features/media/audio/saimum_audio_handler.dart';
 import 'features/media/controllers/media_controller.dart';
 
@@ -29,18 +32,24 @@ Future<void> main() async {
   // Boot 2: One-time silent migration from legacy Java app
   await LegacyMigrationService().runIfNeeded();
 
-  // Boot 3: Open Isar DB
+  // Boot 3: Open Isar DB — include AppLogSchema for local telemetry
   final dir = await getApplicationDocumentsDirectory();
-  await Isar.open(
-    [PlaybackSnapshotSchema, DownloadManifestSchema],
+  final isar = await Isar.open(
+    [PlaybackSnapshotSchema, DownloadManifestSchema, AppLogSchema],
     directory: dir.path,
     name: 'saimum_db',
   );
 
-  // Boot 4: Request notification permission (Android 13+ requires runtime grant)
+  // Boot 4: Initialise telemetry so it can capture errors from this point on
+  TelemetryService.instance.init(isar);
+
+  // Boot 5: Wire up global Flutter error handler → telemetry + custom error UI
+  _setupErrorHandlers();
+
+  // Boot 6: Request notification permission (Android 13+ requires runtime grant)
   await Permission.notification.request();
 
-  // Boot 5: Initialize AudioService (singleton background handler)
+  // Boot 7: Initialize AudioService (singleton background handler)
   final audioHandler = await AudioService.init<SaimumAudioHandler>(
     builder: SaimumAudioHandler.new,
     config: const AudioServiceConfig(
@@ -51,9 +60,7 @@ Future<void> main() async {
     ),
   );
 
-  // Boot 6: Render UI
-  // videoPlayerControllerProvider is pre-warmed inside _BootScreen on first
-  // build via ref.watch — no explicit warm-up needed here.
+  // Boot 8: Render UI
   runApp(
     ProviderScope(
       overrides: [
@@ -62,4 +69,32 @@ Future<void> main() async {
       child: const AppShell(),
     ),
   );
+}
+
+void _setupErrorHandlers() {
+  // Replace Flutter's red-screen with our branded error widget.
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return AppErrorScreen(details: details);
+  };
+
+  // Capture uncaught Flutter framework errors to local telemetry.
+  final originalOnError = FlutterError.onError;
+  FlutterError.onError = (FlutterErrorDetails details) {
+    TelemetryService.instance.logError(
+      'FlutterError',
+      details.exceptionAsString(),
+      details.stack,
+    );
+    originalOnError?.call(details);
+  };
+
+  // Capture Dart errors that escape the Flutter framework (e.g. isolates).
+  WidgetsBinding.instance.platformDispatcher.onError = (error, stack) {
+    TelemetryService.instance.logError(
+      'PlatformDispatcher',
+      error.toString(),
+      stack,
+    );
+    return false; // let the platform handle it too
+  };
 }

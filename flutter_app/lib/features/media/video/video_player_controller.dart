@@ -65,6 +65,7 @@ class VideoPlayerController extends StateNotifier<VideoState> {
   final SaimumAudioHandler _audioHandler;
 
   final List<StreamSubscription<dynamic>> _subs = [];
+  bool _disposed = false;
 
   VideoPlayerController(this._orchestrator, this._audioHandler)
       : _player = Player(
@@ -79,6 +80,7 @@ class VideoPlayerController extends StateNotifier<VideoState> {
 
   void _subscribeToStreams() {
     _subs.add(_player.stream.playing.listen((playing) {
+      if (_disposed) return;
       state = state.copyWith(isPlaying: playing);
       _orchestrator.syncStatus(
         playing ? PlaybackStatus.playing : PlaybackStatus.paused,
@@ -87,6 +89,7 @@ class VideoPlayerController extends StateNotifier<VideoState> {
     }));
 
     _subs.add(_player.stream.buffering.listen((buffering) {
+      if (_disposed) return;
       state = state.copyWith(isLoading: buffering);
       if (buffering) {
         _orchestrator.syncStatus(PlaybackStatus.loading, state.position);
@@ -94,6 +97,7 @@ class VideoPlayerController extends StateNotifier<VideoState> {
     }));
 
     _subs.add(_player.stream.position.listen((pos) {
+      if (_disposed) return;
       state = state.copyWith(position: pos);
       _orchestrator.syncStatus(
         state.isPlaying ? PlaybackStatus.playing : PlaybackStatus.paused,
@@ -102,6 +106,7 @@ class VideoPlayerController extends StateNotifier<VideoState> {
     }));
 
     _subs.add(_player.stream.duration.listen((dur) {
+      if (_disposed) return;
       state = state.copyWith(duration: dur);
       _orchestrator.updateDuration(dur);
     }));
@@ -172,10 +177,18 @@ class VideoPlayerController extends StateNotifier<VideoState> {
 
   @override
   void dispose() {
+    _disposed = true;
+    // Cancel all stream subscriptions BEFORE disposing the player.
+    // This prevents the MPV C++ layer from invoking Dart callbacks that
+    // have already been invalidated — avoids the "Callback invoked after
+    // it has been deleted" SIGABRT crash on Xiaomi/aggressive-OEM devices.
     for (final sub in _subs) {
       sub.cancel();
     }
-    _player.dispose();
+    _subs.clear();
+    // Small delay allows MPV's internal threads to observe subscription
+    // cancellations before the player is fully torn down.
+    Future<void>.delayed(const Duration(milliseconds: 100), _player.dispose);
     super.dispose();
   }
 }

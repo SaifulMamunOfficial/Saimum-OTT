@@ -27,18 +27,29 @@ android {
         applicationId = "com.saimum.saimummusic"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+        // Version 1.0.0 — increment versionCode for every Play Store submission.
+        versionCode = 1
+        versionName = "1.0.0"
         multiDexEnabled = true
-        // KeyStore alias used by the legacy Scytale encryption — must match old app exactly
+        // KeyStore alias used by the legacy Scytale encryption — must match old app exactly.
         buildConfigField("String", "ENC_KEY", "\"saimum_music_key\"")
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
+            // TODO: Replace debug signing with a proper release keystore before shipping.
             signingConfig = signingConfigs.getByName("debug")
+
+            // Enable R8 / ProGuard for release — shrinks APK and obfuscates code.
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+        debug {
+            isMinifyEnabled = false
         }
     }
 }

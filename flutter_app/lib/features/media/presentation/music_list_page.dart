@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../shared/download_icon_button.dart';
 
@@ -237,10 +238,9 @@ class _ArtistCircle extends StatelessWidget {
                 child: SizedBox(
                   width: 68,
                   height: 68,
-                  child: Image.network(
-                    artist.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
+                  child: SongThumbnail(
+                    url: artist.imageUrl,
+                    fallback: Container(
                       color: AppColors.surfaceOne,
                       child: const Icon(Icons.person_rounded,
                           color: AppColors.primary, size: 28),
@@ -400,16 +400,16 @@ class _QuickPickTile extends ConsumerWidget {
                     topLeft: Radius.circular(6),
                     bottomLeft: Radius.circular(6),
                   ),
-                  child: Image.network(
-                    song.thumbnail,
+                  child: SizedBox(
                     width: 52,
                     height: 52,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
-                      width: 52,
-                      color: AppColors.surfaceOne,
-                      child: const Icon(Icons.music_note,
-                          color: AppColors.primary, size: 18),
+                    child: SongThumbnail(
+                      url: song.thumbnail,
+                      fallback: Container(
+                        color: AppColors.surfaceOne,
+                        child: const Icon(Icons.music_note,
+                            color: AppColors.primary, size: 18),
+                      ),
                     ),
                   ),
                 ),
@@ -484,10 +484,9 @@ class _MusicCard extends ConsumerWidget {
                     borderRadius: BorderRadius.circular(12),
                     child: AspectRatio(
                       aspectRatio: 1,
-                      child: Image.network(
-                        song.thumbnail,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
+                      child: SongThumbnail(
+                        url: song.thumbnail,
+                        fallback: Container(
                           color: AppColors.surfaceTwo,
                           child: const Icon(Icons.music_note,
                               color: AppColors.primary, size: 32),

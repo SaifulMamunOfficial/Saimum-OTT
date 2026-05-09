@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/player_overlays.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../shared/media_session_orchestrator.dart';
 
@@ -210,9 +211,10 @@ class _BlurredBackground extends StatelessWidget {
   Widget build(BuildContext context) => Positioned.fill(
         child: ImageFiltered(
           imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
-          child: Image.network(url, fit: BoxFit.cover,
-              errorBuilder: (_, _, _) =>
-                  Container(color: AppColors.surfaceTwo)),
+          child: SongThumbnail(
+            url: url,
+            fallback: Container(color: AppColors.surfaceTwo),
+          ),
         ),
       );
 }
@@ -254,10 +256,7 @@ class _ArtworkCard extends StatelessWidget {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
-        child: url != null
-            ? Image.network(url!, fit: BoxFit.cover,
-                errorBuilder: (_, _, _) => _fallback())
-            : _fallback(),
+        child: SongThumbnail(url: url, fallback: _fallback()),
       ),
     );
   }

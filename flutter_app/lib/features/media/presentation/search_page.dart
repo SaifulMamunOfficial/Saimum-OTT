@@ -7,8 +7,10 @@ import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../controllers/search_controller.dart';
+import '../shared/download_icon_button.dart';
 import '../video/video_player_controller.dart';
 
 // ---------------------------------------------------------------------------
@@ -394,11 +396,14 @@ class _VideoDiscoveryRow extends ConsumerWidget {
                       child: AspectRatio(
                         aspectRatio: 16 / 9,
                         child: Stack(fit: StackFit.expand, children: [
-                          Image.network(v.thumb, fit: BoxFit.cover,
-                              errorBuilder: (_, _, _) => Container(
-                                  color: AppColors.surfaceTwo,
-                                  child: const Icon(Icons.videocam,
-                                      color: AppColors.onSurfaceMuted))),
+                          SongThumbnail(
+                            url: v.thumb,
+                            fallback: Container(
+                              color: AppColors.surfaceTwo,
+                              child: const Icon(Icons.videocam,
+                                  color: AppColors.onSurfaceMuted),
+                            ),
+                          ),
                           Center(
                             child: Container(
                               width: 32, height: 32,
@@ -453,10 +458,9 @@ class _SongResultTile extends ConsumerWidget {
               child: SizedBox(
                 width: 52,
                 height: 52,
-                child: Image.network(
-                  song.thumbnail,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Container(
+                child: SongThumbnail(
+                  url: song.thumbnail,
+                  fallback: Container(
                     color: AppColors.surfaceTwo,
                     child: const Icon(Icons.music_note,
                         color: AppColors.onSurfaceMuted),
@@ -516,19 +520,26 @@ class _SongResultTile extends ConsumerWidget {
               ),
             ),
 
-            // Play button
-            IconButton(
-              icon: const Icon(Icons.play_circle_rounded,
-                  color: AppColors.primary, size: 36),
-              onPressed: () =>
-                  ref.read(mediaControllerProvider.notifier).play(
-                        song.audioUrl,
-                        title: song.title,
-                        artist: song.artist,
-                        artworkUrl: song.thumbnail,
-                      ),
-              padding: EdgeInsets.zero,
-              constraints: const BoxConstraints(),
+            // Actions
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                DownloadIconButton(song: song),
+                const SizedBox(width: 8),
+                IconButton(
+                  icon: const Icon(Icons.play_circle_rounded,
+                      color: AppColors.primary, size: 36),
+                  onPressed: () =>
+                      ref.read(mediaControllerProvider.notifier).play(
+                            song.audioUrl,
+                            title: song.title,
+                            artist: song.artist,
+                            artworkUrl: song.thumbnail,
+                          ),
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints(),
+                ),
+              ],
             ),
           ],
         ),

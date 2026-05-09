@@ -6,6 +6,7 @@ import 'package:media_kit_video/media_kit_video.dart' hide VideoState;
 
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../shared/media_session_orchestrator.dart';
 import '../video/video_player_controller.dart';
 
@@ -381,10 +382,9 @@ class _RelatedCard extends ConsumerWidget {
               child: SizedBox(
                 width: 120,
                 height: 68,
-                child: Image.network(
-                  video.thumb,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Container(
+                child: SongThumbnail(
+                  url: video.thumb,
+                  fallback: Container(
                     color: AppColors.surfaceTwo,
                     child: const Icon(Icons.videocam,
                         color: AppColors.onSurfaceMuted, size: 28),

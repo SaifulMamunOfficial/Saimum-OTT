@@ -8,6 +8,7 @@ import '../../features/media/shared/media_session_orchestrator.dart';
 import '../api_adapter/mock_data.dart';
 import '../theme/app_colors.dart';
 import 'player_modals.dart';
+import 'song_thumbnail.dart';
 
 // ---------------------------------------------------------------------------
 // More Options bottom sheet
@@ -174,12 +175,7 @@ class _QueueSheet extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: SizedBox(
                     width: 44, height: 44,
-                    child: Image.network(song.thumbnail, fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
-                          color: AppColors.surfaceTwo,
-                          child: const Icon(Icons.music_note,
-                              color: AppColors.onSurfaceMuted),
-                        )),
+                    child: SongThumbnail(url: song.thumbnail),
                   ),
                 ),
                 title: Text(song.title,

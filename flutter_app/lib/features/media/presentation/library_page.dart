@@ -6,6 +6,7 @@ import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/models/download_manifest.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/download_controller.dart';
 import '../controllers/media_controller.dart';
 import '../shared/download_icon_button.dart';
@@ -65,7 +66,12 @@ class LibraryPage extends ConsumerWidget {
           const SliverToBoxAdapter(child: SizedBox(height: 24)),
         ],
 
-        // ── All Music ────────────────────────────────────────────────────────
+        // ── Downloaded Songs (Real Isar Data) ────────────────────────────────
+        const SliverToBoxAdapter(child: _SectionHeader('Downloaded Songs')),
+        _DownloadedSongsList(),
+
+        // ── All Music (Mock Data) ──────────────────────────────────────────
+        const SliverToBoxAdapter(child: SizedBox(height: 20)),
         const SliverToBoxAdapter(child: _SectionHeader('All Music')),
         SliverList.separated(
           itemCount: kMockSongs.length,
@@ -136,7 +142,7 @@ class LibraryPage extends ConsumerWidget {
                     name: 'Downloaded',
                     icon: Icons.download_done_rounded,
                     color: const Color(0xFF34C759),
-                    count: downloaded.length),
+                    count: ref.watch(downloadControllerProvider).completedManifests.length),
               ],
             ),
           ),
@@ -221,15 +227,17 @@ class _LibSongTile extends ConsumerWidget {
           const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
       leading: ClipRRect(
         borderRadius: BorderRadius.circular(6),
-        child: SizedBox(
+          child: SizedBox(
           width: 46,
           height: 46,
-          child: Image.network(song.thumbnail,
-              fit: BoxFit.cover,
-              errorBuilder: (_, _, _) => Container(
-                  color: AppColors.surfaceOne,
-                  child: const Icon(Icons.music_note,
-                      color: AppColors.primary, size: 18))),
+          child: SongThumbnail(
+            url: song.thumbnail,
+            fallback: Container(
+              color: AppColors.surfaceOne,
+              child: const Icon(Icons.music_note,
+                  color: AppColors.primary, size: 18),
+            ),
+          ),
         ),
       ),
       title: Text(song.title,
@@ -245,8 +253,8 @@ class _LibSongTile extends ConsumerWidget {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          DownloadIconButton(song: song, size: 22),
-          const SizedBox(width: 4),
+          DownloadIconButton(song: song),
+          const SizedBox(width: 8),
           const Icon(Icons.play_circle_outline_rounded,
               color: AppColors.primary, size: 28),
         ],
@@ -257,6 +265,74 @@ class _LibSongTile extends ConsumerWidget {
             artist: song.artist,
             artworkUrl: song.thumbnail,
           ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Downloaded songs list — fetches from Isar
+// ---------------------------------------------------------------------------
+
+class _DownloadedSongsList extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final manifests = ref.watch(downloadControllerProvider).completedManifests;
+
+    if (manifests.isEmpty) {
+      return SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Text('No offline songs yet.',
+              style: TextStyle(fontSize: 13, color: AppColors.onSurfaceMuted)),
+        ),
+      );
+    }
+
+    return SliverList.builder(
+      itemCount: manifests.length,
+      itemBuilder: (_, i) {
+        final m = manifests[i];
+        return ListTile(
+          contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(6),
+              child: SizedBox(
+              width: 46,
+              height: 46,
+              child: SongThumbnail(
+                url: m.thumbnailUrl,
+                fallback: Container(
+                  color: AppColors.surfaceOne,
+                  child: const Icon(Icons.music_note,
+                      color: AppColors.primary, size: 18),
+                ),
+              ),
+            ),
+          ),
+          title: Text(m.title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
+                  color: AppColors.onSurface)),
+          subtitle: Text(m.artist,
+              style: const TextStyle(fontSize: 11, color: AppColors.onSurfaceMuted)),
+          trailing: IconButton(
+            icon: const Icon(Icons.delete_outline_rounded,
+                color: Colors.redAccent, size: 22),
+            onPressed: () => ref
+                .read(downloadControllerProvider.notifier)
+                .deleteDownload(m.mediaId),
+          ),
+          onTap: () => ref.read(mediaControllerProvider.notifier).playOffline(
+                m.mediaId,
+                title: m.title,
+                artist: m.artist,
+                artworkUrl: m.thumbnailUrl,
+              ),
+        );
+      },
     );
   }
 }
@@ -279,10 +355,9 @@ class _DownloadedSongTile extends ConsumerWidget {
         child: SizedBox(
           width: 46,
           height: 46,
-          child: Image.network(
-            manifest.thumbnailUrl,
-            fit: BoxFit.cover,
-            errorBuilder: (_, _, _) => Container(
+          child: SongThumbnail(
+            url: manifest.thumbnailUrl,
+            fallback: Container(
               color: AppColors.surfaceOne,
               child: const Icon(Icons.music_note,
                   color: AppColors.primary, size: 18),
@@ -370,12 +445,14 @@ class _ArtistGridItem extends StatelessWidget {
               child: SizedBox(
                 width: 72,
                 height: 72,
-                child: Image.network(artist.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
-                        color: AppColors.surfaceOne,
-                        child: const Icon(Icons.person_rounded,
-                            color: AppColors.primary, size: 28))),
+                child: SongThumbnail(
+                  url: artist.imageUrl,
+                  fallback: Container(
+                    color: AppColors.surfaceOne,
+                    child: const Icon(Icons.person_rounded,
+                        color: AppColors.primary, size: 28),
+                  ),
+                ),
               ),
             ),
           ),
@@ -413,12 +490,14 @@ class _AlbumGridItem extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: SizedBox.expand(
-                child: Image.network(album.imageUrl,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
-                        color: AppColors.surfaceTwo,
-                        child: const Icon(Icons.album_rounded,
-                            color: AppColors.primary, size: 36))),
+                child: SongThumbnail(
+                  url: album.imageUrl,
+                  fallback: Container(
+                    color: AppColors.surfaceTwo,
+                    child: const Icon(Icons.album_rounded,
+                        color: AppColors.primary, size: 36),
+                  ),
+                ),
               ),
             ),
           ),

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../video/video_player_controller.dart';
 
@@ -323,28 +324,32 @@ class _TrendingCard extends ConsumerWidget {
         width: 120,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(14),
               child: SizedBox(
                 width: 120,
-                height: 120,
+                height: 112,
                 child: _SongImage(url: song.thumbnail),
               ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 5),
             Text(song.title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
+                    height: 1.2,
                     color: AppColors.onSurface)),
             Text(song.artist,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                    fontSize: 11, color: AppColors.onSurfaceMuted)),
+                    fontSize: 11,
+                    height: 1.2,
+                    color: AppColors.onSurfaceMuted)),
           ],
         ),
       ),
@@ -426,10 +431,9 @@ class _VideoBanner extends ConsumerWidget {
               SizedBox(
                 height: 160,
                 width: double.infinity,
-                child: Image.network(
-                  _kDemoVideo.thumb,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => Container(
+                child: SongThumbnail(
+                  url: _kDemoVideo.thumb,
+                  fallback: Container(
                     color: AppColors.surfaceTwo,
                     child: const Icon(Icons.videocam,
                         size: 48, color: AppColors.onSurfaceMuted),
@@ -494,7 +498,7 @@ class _VideoBanner extends ConsumerWidget {
 }
 
 // ---------------------------------------------------------------------------
-// Shared thumbnail widget with network fallback
+// Shared thumbnail widget — delegates to global SongThumbnail (cached)
 // ---------------------------------------------------------------------------
 
 class _SongImage extends StatelessWidget {
@@ -502,15 +506,5 @@ class _SongImage extends StatelessWidget {
   const _SongImage({required this.url});
 
   @override
-  Widget build(BuildContext context) {
-    return Image.network(
-      url,
-      fit: BoxFit.cover,
-      errorBuilder: (_, _, _) => Container(
-        color: AppColors.surfaceTwo,
-        child:
-            const Icon(Icons.music_note, color: AppColors.onSurfaceMuted),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SongThumbnail(url: url);
 }

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Network Security Config for Saimum Music.
+
+  Allows cleartext (HTTP) traffic to the app's own backend domains and localhost
+  (used by just_audio's internal HTTP server). All other traffic defaults to
+  HTTPS-only enforced by Android's default network security policy.
+
+  NOTE: Replace the domain entries below with your actual production API hostname
+  before shipping to production and remove the "localhost" entry.
+-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- Development: allow HTTP to localhost (just_audio internal server) -->
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">localhost</domain>
+        <!-- TODO: Replace with your actual API domain -->
+        <domain includeSubdomains="true">saimummusic.com</domain>
+        <domain includeSubdomains="true">api.saimummusic.com</domain>
+    </domain-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>

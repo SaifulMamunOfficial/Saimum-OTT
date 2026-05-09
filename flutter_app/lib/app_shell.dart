@@ -8,6 +8,9 @@ import 'package:media_kit_video/media_kit_video.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_colors.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/battery_optimization_banner.dart';
+import 'core/widgets/connectivity_banner.dart';
+import 'core/widgets/song_thumbnail.dart';
 import 'features/media/controllers/media_controller.dart';
 import 'features/media/presentation/full_player_page.dart';
 import 'features/media/presentation/video_player_page.dart';
@@ -69,6 +72,19 @@ class MainShell extends ConsumerWidget {
             child: Video(controller: videoCtrl.videoController),
           ),
           child,
+          // System banners — stacked at the top of the screen in priority order.
+          const Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                BatteryOptimizationBanner(),
+                ConnectivityBanner(),
+              ],
+            ),
+          ),
           // Floating profile avatar — hidden on detail pages (/artist, /album)
           // to prevent overlap with their own SliverAppBar back button / title.
           Builder(builder: (ctx) {
@@ -230,14 +246,10 @@ class _MiniPlayer extends ConsumerWidget {
                           child: SizedBox(
                             width: 56,
                             height: 56,
-                            child: item.artworkUrl != null
-                                ? Image.network(
-                                    item.artworkUrl!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (_, _, _) =>
-                                        _fallback(isVideo),
-                                  )
-                                : _fallback(isVideo),
+                            child: SongThumbnail(
+                              url: item.artworkUrl,
+                              fallback: _fallback(isVideo),
+                            ),
                           ),
                         ),
                         const SizedBox(width: 14),
