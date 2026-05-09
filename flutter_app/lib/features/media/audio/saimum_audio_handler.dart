@@ -69,6 +69,22 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
     await _player.play();
   }
 
+  /// Plays from a custom [AudioSource] (e.g., [DecryptionAudioSource]).
+  /// Publishes [mediaItem] to the notification / lock screen.
+  Future<void> playFromSource(AudioSource source, {MediaItem? mediaItem}) async {
+    this.mediaItem.add(
+      mediaItem ??
+          MediaItem(
+            id: 'offline',
+            title: 'Saimum Music',
+            artist: 'Offline',
+            album: 'Saimum Music',
+          ),
+    );
+    await _player.setAudioSource(source);
+    await _player.play();
+  }
+
   @override
   Future<void> play() => _player.play();
 

@@ -1,3 +1,3 @@
 const bool videoEnabled = true;
-const bool encryptionEnabled = false;
-const bool downloadEnabled = false;
+const bool encryptionEnabled = true;
+const bool downloadEnabled = true;

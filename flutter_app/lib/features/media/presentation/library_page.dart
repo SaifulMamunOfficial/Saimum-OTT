@@ -4,14 +4,20 @@ import 'package:go_router/go_router.dart';
 
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
+import '../../../core/models/download_manifest.dart';
 import '../../../core/theme/app_colors.dart';
+import '../controllers/download_controller.dart';
 import '../controllers/media_controller.dart';
+import '../shared/download_icon_button.dart';
 
 class LibraryPage extends ConsumerWidget {
   const LibraryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final dlState = ref.watch(downloadControllerProvider);
+    final downloaded = dlState.completedManifests;
+
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
@@ -29,7 +35,6 @@ class LibraryPage extends ConsumerWidget {
                         color: AppColors.onSurface,
                         letterSpacing: -0.7)),
                 const SizedBox(height: 14),
-                // Stats row
                 Row(
                   children: [
                     _StatChip(label: '${kMockSongs.length}', sub: 'Songs',
@@ -46,6 +51,19 @@ class LibraryPage extends ConsumerWidget {
             ),
           ),
         ),
+
+        // ── Downloaded Songs ─────────────────────────────────────────────────
+        if (downloaded.isNotEmpty) ...[
+          const SliverToBoxAdapter(child: _SectionHeader('Downloaded Songs')),
+          SliverList.separated(
+            itemCount: downloaded.length,
+            separatorBuilder: (_, _) =>
+                const Divider(height: 1, color: AppColors.glassBorder),
+            itemBuilder: (_, i) =>
+                _DownloadedSongTile(manifest: downloaded[i]),
+          ),
+          const SliverToBoxAdapter(child: SizedBox(height: 24)),
+        ],
 
         // ── All Music ────────────────────────────────────────────────────────
         const SliverToBoxAdapter(child: _SectionHeader('All Music')),
@@ -118,7 +136,7 @@ class LibraryPage extends ConsumerWidget {
                     name: 'Downloaded',
                     icon: Icons.download_done_rounded,
                     color: const Color(0xFF34C759),
-                    count: 0),
+                    count: downloaded.length),
               ],
             ),
           ),
@@ -224,13 +242,98 @@ class _LibSongTile extends ConsumerWidget {
       subtitle: Text(song.artist,
           style:
               const TextStyle(fontSize: 11, color: AppColors.onSurfaceMuted)),
-      trailing: const Icon(Icons.play_circle_outline_rounded,
-          color: AppColors.primary, size: 28),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          DownloadIconButton(song: song, size: 22),
+          const SizedBox(width: 4),
+          const Icon(Icons.play_circle_outline_rounded,
+              color: AppColors.primary, size: 28),
+        ],
+      ),
       onTap: () => ref.read(mediaControllerProvider.notifier).play(
             song.audioUrl,
             title: song.title,
             artist: song.artist,
             artworkUrl: song.thumbnail,
+          ),
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Downloaded song tile — plays offline
+// ---------------------------------------------------------------------------
+
+class _DownloadedSongTile extends ConsumerWidget {
+  final DownloadManifest manifest;
+  const _DownloadedSongTile({required this.manifest});
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return ListTile(
+      contentPadding:
+          const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: SizedBox(
+          width: 46,
+          height: 46,
+          child: Image.network(
+            manifest.thumbnailUrl,
+            fit: BoxFit.cover,
+            errorBuilder: (_, _, _) => Container(
+              color: AppColors.surfaceOne,
+              child: const Icon(Icons.music_note,
+                  color: AppColors.primary, size: 18),
+            ),
+          ),
+        ),
+      ),
+      title: Text(manifest.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 13,
+              color: AppColors.onSurface)),
+      subtitle: Row(
+        children: [
+          const Icon(Icons.download_done_rounded,
+              size: 12, color: AppColors.success),
+          const SizedBox(width: 4),
+          Expanded(
+            child: Text(
+              manifest.artist,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style:
+                  const TextStyle(fontSize: 11, color: AppColors.onSurfaceMuted),
+            ),
+          ),
+        ],
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Delete button
+          GestureDetector(
+            onTap: () => ref
+                .read(downloadControllerProvider.notifier)
+                .deleteDownload(manifest.mediaId),
+            child: const Icon(Icons.delete_outline_rounded,
+                color: AppColors.onSurfaceMuted, size: 20),
+          ),
+          const SizedBox(width: 8),
+          const Icon(Icons.play_circle_outline_rounded,
+              color: AppColors.primary, size: 28),
+        ],
+      ),
+      onTap: () => ref.read(mediaControllerProvider.notifier).playOffline(
+            manifest.mediaId,
+            title: manifest.title,
+            artist: manifest.artist,
+            artworkUrl: manifest.thumbnailUrl,
           ),
     );
   }
@@ -383,7 +486,7 @@ class _PlaylistCard extends StatelessWidget {
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                         color: AppColors.onSurface)),
-                Text(count == 0 ? 'Coming in Phase 7' : '$count songs',
+                Text(count == 0 ? 'No downloads yet' : '$count songs',
                     style: const TextStyle(
                         fontSize: 11, color: AppColors.onSurfaceMuted)),
               ],

@@ -9,9 +9,16 @@ class DownloadManifest {
   @Index(unique: true, replace: true)
   late String mediaId;
 
+  late String title;
+  late String artist;
+  late String thumbnailUrl;
+
   late String localPath;
 
   late int fileSize;
+
+  late int totalChunks;
+  late int downloadedChunks;
 
   late bool isCompleted;
 

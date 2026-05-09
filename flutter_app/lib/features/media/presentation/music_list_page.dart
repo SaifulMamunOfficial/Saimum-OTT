@@ -8,6 +8,7 @@ import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../controllers/media_controller.dart';
+import '../shared/download_icon_button.dart';
 
 // ---------------------------------------------------------------------------
 // Genre palette
@@ -394,7 +395,6 @@ class _QuickPickTile extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                // Thumbnail
                 ClipRRect(
                   borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(6),
@@ -425,7 +425,8 @@ class _QuickPickTile extends ConsumerWidget {
                         color: AppColors.onSurface),
                   ),
                 ),
-                const SizedBox(width: 6),
+                DownloadIconButton(song: song, size: 20),
+                const SizedBox(width: 4),
               ],
             ),
           ),
@@ -477,20 +478,30 @@ class _MusicCard extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: AspectRatio(
-                  aspectRatio: 1,
-                  child: Image.network(
-                    song.thumbnail,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
-                      color: AppColors.surfaceTwo,
-                      child: const Icon(Icons.music_note,
-                          color: AppColors.primary, size: 32),
+              Stack(
+                children: [
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: Image.network(
+                        song.thumbnail,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, _, _) => Container(
+                          color: AppColors.surfaceTwo,
+                          child: const Icon(Icons.music_note,
+                              color: AppColors.primary, size: 32),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  // Download button badge
+                  Positioned(
+                    right: 4,
+                    bottom: 4,
+                    child: DownloadIconButton(song: song, size: 18),
+                  ),
+                ],
               ),
               const SizedBox(height: 8),
               Text(song.title,
@@ -501,7 +512,6 @@ class _MusicCard extends ConsumerWidget {
                       fontWeight: FontWeight.w600,
                       color: AppColors.onSurface)),
               const SizedBox(height: 2),
-              // Tappable artist name → artist detail page
               GestureDetector(
                 onTap: () {
                   final a = artistByName(song.artist);

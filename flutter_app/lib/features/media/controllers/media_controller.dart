@@ -1,9 +1,13 @@
 import 'dart:async';
 
 import 'package:audio_service/audio_service.dart';
+import 'package:encrypt/encrypt.dart' as enc;
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/models/download_manifest.dart';
+import '../../../core/utils/db_service.dart';
+import '../../../core/utils/decryption_audio_source.dart';
 import '../audio/saimum_audio_handler.dart';
 import '../shared/media_session_orchestrator.dart';
 import '../video/video_player_controller.dart';
@@ -156,6 +160,64 @@ class MediaController extends StateNotifier<MediaState> {
   Future<void> setSpeed(double speed) async {
     await _handler.setSpeed(speed);
     state = state.copyWith(speed: speed);
+  }
+
+  /// Plays a fully downloaded + encrypted song without any network request.
+  Future<void> playOffline(
+    String mediaId, {
+    String title = 'Saimum Music',
+    String? artist,
+    String? artworkUrl,
+  }) async {
+    final isar = _ref.read(isarProvider);
+    final manifest = await isar.downloadManifests.getByMediaId(mediaId);
+
+    if (manifest == null || !manifest.isCompleted) {
+      debugPrint('DEBUG: playOffline — manifest missing or incomplete for $mediaId');
+      return;
+    }
+
+    final iv = enc.IV.fromBase64(manifest.encryptionIv!);
+    final source = DecryptionAudioSource(
+      mediaId: mediaId,
+      chunksDir: manifest.localPath,
+      totalChunks: manifest.totalChunks,
+      fileSize: manifest.fileSize,
+      iv: iv,
+    );
+
+    // Stop video engine before taking audio focus.
+    final orchState = _ref.read(mediaSessionOrchestratorProvider);
+    if (orchState.isVideoActive) {
+      try {
+        await _ref.read(videoPlayerControllerProvider.notifier).stop();
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      } catch (e) {
+        debugPrint('DEBUG: Video stop (offline switch) error: $e');
+      }
+    }
+
+    state = state.copyWith(isLoading: true, currentUrl: 'offline:$mediaId');
+
+    _orchestrator.switchToSource(
+      NowPlayingItem(
+        id: mediaId,
+        title: title,
+        sourceUrl: 'offline:$mediaId',
+        artist: artist,
+        artworkUrl: artworkUrl,
+      ),
+      PlaybackMode.audio,
+    );
+
+    await _handler.playFromSource(
+      source,
+      mediaItem: MediaItem(
+        id: mediaId,
+        title: title,
+        artist: artist ?? 'Offline',
+      ),
+    );
   }
 
   @override

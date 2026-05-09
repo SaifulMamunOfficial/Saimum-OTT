@@ -17,30 +17,55 @@ const DownloadManifestSchema = CollectionSchema(
   name: r'DownloadManifest',
   id: 8391474692485648913,
   properties: {
-    r'encryptionIv': PropertySchema(
+    r'artist': PropertySchema(
       id: 0,
+      name: r'artist',
+      type: IsarType.string,
+    ),
+    r'downloadedChunks': PropertySchema(
+      id: 1,
+      name: r'downloadedChunks',
+      type: IsarType.long,
+    ),
+    r'encryptionIv': PropertySchema(
+      id: 2,
       name: r'encryptionIv',
       type: IsarType.string,
     ),
     r'fileSize': PropertySchema(
-      id: 1,
+      id: 3,
       name: r'fileSize',
       type: IsarType.long,
     ),
     r'isCompleted': PropertySchema(
-      id: 2,
+      id: 4,
       name: r'isCompleted',
       type: IsarType.bool,
     ),
     r'localPath': PropertySchema(
-      id: 3,
+      id: 5,
       name: r'localPath',
       type: IsarType.string,
     ),
     r'mediaId': PropertySchema(
-      id: 4,
+      id: 6,
       name: r'mediaId',
       type: IsarType.string,
+    ),
+    r'thumbnailUrl': PropertySchema(
+      id: 7,
+      name: r'thumbnailUrl',
+      type: IsarType.string,
+    ),
+    r'title': PropertySchema(
+      id: 8,
+      name: r'title',
+      type: IsarType.string,
+    ),
+    r'totalChunks': PropertySchema(
+      id: 9,
+      name: r'totalChunks',
+      type: IsarType.long,
     )
   },
   estimateSize: _downloadManifestEstimateSize,
@@ -77,6 +102,7 @@ int _downloadManifestEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.artist.length * 3;
   {
     final value = object.encryptionIv;
     if (value != null) {
@@ -85,6 +111,8 @@ int _downloadManifestEstimateSize(
   }
   bytesCount += 3 + object.localPath.length * 3;
   bytesCount += 3 + object.mediaId.length * 3;
+  bytesCount += 3 + object.thumbnailUrl.length * 3;
+  bytesCount += 3 + object.title.length * 3;
   return bytesCount;
 }
 
@@ -94,11 +122,16 @@ void _downloadManifestSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeString(offsets[0], object.encryptionIv);
-  writer.writeLong(offsets[1], object.fileSize);
-  writer.writeBool(offsets[2], object.isCompleted);
-  writer.writeString(offsets[3], object.localPath);
-  writer.writeString(offsets[4], object.mediaId);
+  writer.writeString(offsets[0], object.artist);
+  writer.writeLong(offsets[1], object.downloadedChunks);
+  writer.writeString(offsets[2], object.encryptionIv);
+  writer.writeLong(offsets[3], object.fileSize);
+  writer.writeBool(offsets[4], object.isCompleted);
+  writer.writeString(offsets[5], object.localPath);
+  writer.writeString(offsets[6], object.mediaId);
+  writer.writeString(offsets[7], object.thumbnailUrl);
+  writer.writeString(offsets[8], object.title);
+  writer.writeLong(offsets[9], object.totalChunks);
 }
 
 DownloadManifest _downloadManifestDeserialize(
@@ -108,12 +141,17 @@ DownloadManifest _downloadManifestDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = DownloadManifest();
-  object.encryptionIv = reader.readStringOrNull(offsets[0]);
-  object.fileSize = reader.readLong(offsets[1]);
+  object.artist = reader.readString(offsets[0]);
+  object.downloadedChunks = reader.readLong(offsets[1]);
+  object.encryptionIv = reader.readStringOrNull(offsets[2]);
+  object.fileSize = reader.readLong(offsets[3]);
   object.id = id;
-  object.isCompleted = reader.readBool(offsets[2]);
-  object.localPath = reader.readString(offsets[3]);
-  object.mediaId = reader.readString(offsets[4]);
+  object.isCompleted = reader.readBool(offsets[4]);
+  object.localPath = reader.readString(offsets[5]);
+  object.mediaId = reader.readString(offsets[6]);
+  object.thumbnailUrl = reader.readString(offsets[7]);
+  object.title = reader.readString(offsets[8]);
+  object.totalChunks = reader.readLong(offsets[9]);
   return object;
 }
 
@@ -125,15 +163,25 @@ P _downloadManifestDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 1:
       return (reader.readLong(offset)) as P;
     case 2:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 4:
+      return (reader.readBool(offset)) as P;
+    case 5:
       return (reader.readString(offset)) as P;
+    case 6:
+      return (reader.readString(offset)) as P;
+    case 7:
+      return (reader.readString(offset)) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
+      return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -333,6 +381,198 @@ extension DownloadManifestQueryWhere
 
 extension DownloadManifestQueryFilter
     on QueryBuilder<DownloadManifest, DownloadManifest, QFilterCondition> {
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'artist',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'artist',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'artist',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'artist',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      artistIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'artist',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      downloadedChunksEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'downloadedChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      downloadedChunksGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'downloadedChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      downloadedChunksLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'downloadedChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      downloadedChunksBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'downloadedChunks',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
       encryptionIvIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -880,6 +1120,334 @@ extension DownloadManifestQueryFilter
       ));
     });
   }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'thumbnailUrl',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'thumbnailUrl',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'thumbnailUrl',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'thumbnailUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      thumbnailUrlIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'thumbnailUrl',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'title',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'title',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'title',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      titleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'title',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      totalChunksEqualTo(int value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      totalChunksGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      totalChunksLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalChunks',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterFilterCondition>
+      totalChunksBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalChunks',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
 }
 
 extension DownloadManifestQueryObject
@@ -890,6 +1458,34 @@ extension DownloadManifestQueryLinks
 
 extension DownloadManifestQuerySortBy
     on QueryBuilder<DownloadManifest, DownloadManifest, QSortBy> {
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByArtist() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'artist', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByArtistDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'artist', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByDownloadedChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadedChunks', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByDownloadedChunksDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadedChunks', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
       sortByEncryptionIv() {
     return QueryBuilder.apply(this, (query) {
@@ -959,10 +1555,79 @@ extension DownloadManifestQuerySortBy
       return query.addSortBy(r'mediaId', Sort.desc);
     });
   }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByThumbnailUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbnailUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByThumbnailUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbnailUrl', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy> sortByTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByTitleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByTotalChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalChunks', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      sortByTotalChunksDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalChunks', Sort.desc);
+    });
+  }
 }
 
 extension DownloadManifestQuerySortThenBy
     on QueryBuilder<DownloadManifest, DownloadManifest, QSortThenBy> {
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByArtist() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'artist', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByArtistDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'artist', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByDownloadedChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadedChunks', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByDownloadedChunksDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'downloadedChunks', Sort.desc);
+    });
+  }
+
   QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
       thenByEncryptionIv() {
     return QueryBuilder.apply(this, (query) {
@@ -1045,10 +1710,65 @@ extension DownloadManifestQuerySortThenBy
       return query.addSortBy(r'mediaId', Sort.desc);
     });
   }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByThumbnailUrl() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbnailUrl', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByThumbnailUrlDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'thumbnailUrl', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy> thenByTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByTitleDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'title', Sort.desc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByTotalChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalChunks', Sort.asc);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QAfterSortBy>
+      thenByTotalChunksDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalChunks', Sort.desc);
+    });
+  }
 }
 
 extension DownloadManifestQueryWhereDistinct
     on QueryBuilder<DownloadManifest, DownloadManifest, QDistinct> {
+  QueryBuilder<DownloadManifest, DownloadManifest, QDistinct> distinctByArtist(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'artist', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QDistinct>
+      distinctByDownloadedChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'downloadedChunks');
+    });
+  }
+
   QueryBuilder<DownloadManifest, DownloadManifest, QDistinct>
       distinctByEncryptionIv({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -1083,6 +1803,27 @@ extension DownloadManifestQueryWhereDistinct
       return query.addDistinctBy(r'mediaId', caseSensitive: caseSensitive);
     });
   }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QDistinct>
+      distinctByThumbnailUrl({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'thumbnailUrl', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QDistinct> distinctByTitle(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<DownloadManifest, DownloadManifest, QDistinct>
+      distinctByTotalChunks() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalChunks');
+    });
+  }
 }
 
 extension DownloadManifestQueryProperty
@@ -1090,6 +1831,19 @@ extension DownloadManifestQueryProperty
   QueryBuilder<DownloadManifest, int, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<DownloadManifest, String, QQueryOperations> artistProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'artist');
+    });
+  }
+
+  QueryBuilder<DownloadManifest, int, QQueryOperations>
+      downloadedChunksProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'downloadedChunks');
     });
   }
 
@@ -1121,6 +1875,25 @@ extension DownloadManifestQueryProperty
   QueryBuilder<DownloadManifest, String, QQueryOperations> mediaIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mediaId');
+    });
+  }
+
+  QueryBuilder<DownloadManifest, String, QQueryOperations>
+      thumbnailUrlProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'thumbnailUrl');
+    });
+  }
+
+  QueryBuilder<DownloadManifest, String, QQueryOperations> titleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'title');
+    });
+  }
+
+  QueryBuilder<DownloadManifest, int, QQueryOperations> totalChunksProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalChunks');
     });
   }
 }
