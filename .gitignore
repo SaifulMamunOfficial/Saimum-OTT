@@ -23,3 +23,14 @@ Laravel-Backend-Code/vendor/
 Laravel-Backend-Code/images/
 Laravel-Backend-Code/assets/
 cgi-bin/
+
+# Sensitive config files
+**/.env
+**/google-services.json
+**/GoogleService-Info.plist
+**/*.keystore
+**/*.jks
+**/*.p12
+**/*.key
+**/key.properties
+**/config.php
