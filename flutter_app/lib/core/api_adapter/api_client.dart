@@ -1,11 +1,18 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-const _baseUrl = 'https://your-laravel-api.com/api/v1/';
-const _connectTimeoutMs = 10000;
-const _receiveTimeoutMs = 15000;
+final apiClientProvider = Provider<Dio>((ref) => ApiClient.instance.dio);
+
+// For physical devices, use your PC's IP address
+// For Android Emulator, use 10.0.2.2
+const _baseIp = '192.168.0.170'; 
+const _baseUrl = 'http://$_baseIp:8000/api/';
+const _connectTimeoutMs = 15000;
+const _receiveTimeoutMs = 60000;
 
 // Placeholder — move to BuildConfig / flutter_secure_storage in Phase 8.
 const _hmacSecret = 'your-hmac-signing-secret';
@@ -31,8 +38,7 @@ class ApiClient {
       ),
     );
 
-    // Order matters: HMAC signs the request first, then logger records it.
-    dio.interceptors.add(HmacSignatureInterceptor());
+    // dio.interceptors.add(HmacSignatureInterceptor()); // Disabled for now
     dio.interceptors.add(
       LogInterceptor(
         request: true,
@@ -57,8 +63,7 @@ class ApiClient {
 
   static void _log(String message) {
     // Replace with structured logger in Phase 8.
-    // ignore: avoid_print
-    print('[ApiClient] $message');
+    debugPrint('[ApiClient] $message');
   }
 }
 

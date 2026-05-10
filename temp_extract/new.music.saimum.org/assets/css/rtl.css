@@ -1,0 +1,22 @@
+body {
+    direction: rtl !important;
+    text-align: right !important;
+}
+.ms-auto {
+    margin-left: 1px !important;
+    margin-right: auto !important;
+}
+.nsofts-sidebar-nav .nsofts-sidebar-nav__icon {
+    margin-left: 10px !important;
+}
+li.nsofts-header-nav__item {
+    margin-left: 5px !important;
+}
+.nsofts-sidebar-nav .nsofts-sidebar-menu {
+    margin-right: 14px !important;
+}
+@media (max-width: 1199.98px) {
+    #nsofts_hamburger_top {
+        margin-left: 16px !important;
+    }
+}

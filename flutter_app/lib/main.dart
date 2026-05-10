@@ -11,11 +11,14 @@ import 'app_shell.dart';
 import 'core/models/app_log.dart';
 import 'core/models/download_manifest.dart';
 import 'core/models/playback_snapshot.dart';
+import 'core/models/favorite.dart';
+import 'core/models/playlist.dart';
 import 'core/utils/migration_service.dart';
 import 'core/utils/telemetry_service.dart';
 import 'core/widgets/error_boundary.dart';
 import 'features/media/audio/saimum_audio_handler.dart';
 import 'features/media/controllers/media_controller.dart';
+import 'core/constants/app_constants.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +38,13 @@ Future<void> main() async {
   // Boot 3: Open Isar DB — include AppLogSchema for local telemetry
   final dir = await getApplicationDocumentsDirectory();
   final isar = await Isar.open(
-    [PlaybackSnapshotSchema, DownloadManifestSchema, AppLogSchema],
+    [
+      PlaybackSnapshotSchema,
+      DownloadManifestSchema,
+      AppLogSchema,
+      FavoriteModelSchema,
+      PlaylistModelSchema,
+    ],
     directory: dir.path,
     name: 'saimum_db',
   );
@@ -54,7 +63,7 @@ Future<void> main() async {
     builder: SaimumAudioHandler.new,
     config: const AudioServiceConfig(
       androidNotificationChannelId: 'com.saimum.saimummusic.channel.audio',
-      androidNotificationChannelName: 'Saimum Music',
+      androidNotificationChannelName: AppConstants.appName,
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
     ),

@@ -106,14 +106,14 @@ const List<MockVideo> kMockVideos = [
 
 /// Temporary mock songs — replace with real API once Task 3.2 endpoint is live.
 const List<SongModel> kMockSongs = [
-  SongModel(id: 1, title: 'Neon Horizons', artist: 'Echo Wave', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', thumbnail: 'https://picsum.photos/seed/s1/300/300', duration: 372, album: 'Synthwave Dreams', genre: 'Electronic'),
-  SongModel(id: 2, title: 'Midnight Drive', artist: 'Luna Frost', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', thumbnail: 'https://picsum.photos/seed/s2/300/300', duration: 289, album: 'City Lights', genre: 'Chill'),
-  SongModel(id: 3, title: 'Cosmic Drift', artist: 'Starfall', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', thumbnail: 'https://picsum.photos/seed/s3/300/300', duration: 321, album: 'Outer Space', genre: 'Ambient'),
-  SongModel(id: 4, title: 'Violet Storm', artist: 'Neon Pulse', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', thumbnail: 'https://picsum.photos/seed/s4/300/300', duration: 254, album: 'Electric Skies', genre: 'Electronic'),
-  SongModel(id: 5, title: 'Ocean Glitch', artist: 'Wave.exe', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3', thumbnail: 'https://picsum.photos/seed/s5/300/300', duration: 308, album: 'Deep Blue', genre: 'Lo-Fi'),
-  SongModel(id: 6, title: 'Solar Wind', artist: 'Astral Keys', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3', thumbnail: 'https://picsum.photos/seed/s6/300/300', duration: 412, album: 'Solar Flares', genre: 'Ambient'),
-  SongModel(id: 7, title: 'Binary Bloom', artist: 'Circuit Sage', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3', thumbnail: 'https://picsum.photos/seed/s7/300/300', duration: 275, album: 'Code Garden', genre: 'Electronic'),
-  SongModel(id: 8, title: 'Aurora Pulse', artist: 'Deep Freeze', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', thumbnail: 'https://picsum.photos/seed/s8/300/300', duration: 340, album: 'Northern Lights', genre: 'Chill'),
+  SongModel(id: 1, title: 'Neon Horizons', artist: 'Echo Wave', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3', thumbnail: 'https://picsum.photos/seed/s1/300/300', duration: 372, album: 'Synthwave Dreams', genre: 'Electronic', totalViews: 128400),
+  SongModel(id: 2, title: 'Midnight Drive', artist: 'Luna Frost', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3', thumbnail: 'https://picsum.photos/seed/s2/300/300', duration: 289, album: 'City Lights', genre: 'Chill', totalViews: 45200),
+  SongModel(id: 3, title: 'Cosmic Drift', artist: 'Starfall', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3', thumbnail: 'https://picsum.photos/seed/s3/300/300', duration: 321, album: 'Outer Space', genre: 'Ambient', totalViews: 8900),
+  SongModel(id: 4, title: 'Violet Storm', artist: 'Neon Pulse', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3', thumbnail: 'https://picsum.photos/seed/s4/300/300', duration: 254, album: 'Electric Skies', genre: 'Electronic', totalViews: 2100000),
+  SongModel(id: 5, title: 'Ocean Glitch', artist: 'Wave.exe', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3', thumbnail: 'https://picsum.photos/seed/s5/300/300', duration: 308, album: 'Deep Blue', genre: 'Lo-Fi', totalViews: 333),
+  SongModel(id: 6, title: 'Solar Wind', artist: 'Astral Keys', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3', thumbnail: 'https://picsum.photos/seed/s6/300/300', duration: 412, album: 'Solar Flares', genre: 'Ambient', totalViews: 12050),
+  SongModel(id: 7, title: 'Binary Bloom', artist: 'Circuit Sage', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3', thumbnail: 'https://picsum.photos/seed/s7/300/300', duration: 275, album: 'Code Garden', genre: 'Electronic', totalViews: 5600000),
+  SongModel(id: 8, title: 'Aurora Pulse', artist: 'Deep Freeze', audioUrl: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3', thumbnail: 'https://picsum.photos/seed/s8/300/300', duration: 340, album: 'Northern Lights', genre: 'Chill', totalViews: 42),
 ];
 
 /// First 3 used as hero/featured cards.

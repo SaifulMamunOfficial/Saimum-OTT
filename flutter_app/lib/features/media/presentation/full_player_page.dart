@@ -2,11 +2,15 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:audio_service/audio_service.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/player_overlays.dart';
 import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
+import '../controllers/favorite_controller.dart';
+import '../controllers/download_controller.dart';
+import '../../../core/api_adapter/models/song_model.dart';
 import '../shared/media_session_orchestrator.dart';
 
 // ---------------------------------------------------------------------------
@@ -39,9 +43,6 @@ class FullPlayerPage extends ConsumerStatefulWidget {
 class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
   bool _isDragging = false;
   double _dragValue = 0;
-  bool _isFavorited = false;
-  bool _isShuffle = false;
-  bool _isRepeat = false;
 
   String _fmt(Duration d) {
     final m = d.inMinutes.remainder(60).toString().padLeft(2, '0');
@@ -55,6 +56,10 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
     final ctrl = ref.read(mediaControllerProvider.notifier);
 
     final item = orch.currentItem;
+    final mediaState = ref.watch(mediaControllerProvider);
+    final isFavorited = mediaState.currentSongId != null && 
+        ref.watch(favoriteIdsProvider).contains(mediaState.currentSongId);
+    
     final isPlaying = orch.status == PlaybackStatus.playing;
     final isLoading = orch.status == PlaybackStatus.loading;
     final maxSecs = orch.duration.inSeconds > 0
@@ -63,6 +68,12 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
     final posSecs = _isDragging
         ? _dragValue
         : orch.position.inSeconds.toDouble().clamp(0.0, maxSecs);
+
+    final pbStateAsync = ref.watch(playbackStateProvider);
+    final pbState = pbStateAsync.value;
+    
+    final isShuffle = pbState?.shuffleMode == AudioServiceShuffleMode.all;
+    final repeatMode = pbState?.repeatMode ?? AudioServiceRepeatMode.none;
 
     return DraggableScrollableSheet(
       initialChildSize: 0.96,
@@ -117,7 +128,7 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
                           IconButton(
                             icon: const Icon(Icons.more_vert_rounded,
                                 color: AppColors.onSurfaceMuted, size: 24),
-                            onPressed: () => showMoreOptionsSheet(context),
+                            onPressed: () => showMoreOptionsSheet(context, mediaState.currentSongId),
                           ),
                         ],
                       ),
@@ -165,12 +176,32 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
 
                       // ── Icon action bar ────────────────────────────────
                       _IconBar(
-                        isFavorited: _isFavorited,
-                        onFavourite: () =>
-                            setState(() => _isFavorited = !_isFavorited),
+                        isFavorited: isFavorited,
+                        onFavourite: () {
+                          if (mediaState.currentSongId != null) {
+                            ref.read(favoriteIdsProvider.notifier).toggle(mediaState.currentSongId!);
+                          }
+                        },
                         onLyrics: () =>
                             showLyricsOverlay(context, item?.title, item?.artist),
                         onQueue: () => showQueueSheet(context),
+                        onSave: () {
+                          if (item != null && mediaState.currentSongId != null) {
+                            final song = SongModel(
+                              id: mediaState.currentSongId!,
+                              title: item.title,
+                              artist: item.artist ?? '',
+                              thumbnail: item.artworkUrl ?? '',
+                              audioUrl: item.sourceUrl,
+                              duration: orch.duration.inSeconds,
+                              totalViews: 0,
+                            );
+                            ref.read(downloadControllerProvider.notifier).download(song);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Downloading ${song.title}...')),
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(height: 32),
 
@@ -178,13 +209,13 @@ class _FullPlayerPageState extends ConsumerState<FullPlayerPage> {
                       _ControlRow(
                         isPlaying: isPlaying,
                         isLoading: isLoading,
-                        isShuffle: _isShuffle,
-                        isRepeat: _isRepeat,
-                        onPlayPause: () { if (isPlaying) ctrl.pause(); },
-                        onShuffle: () =>
-                            setState(() => _isShuffle = !_isShuffle),
-                        onRepeat: () =>
-                            setState(() => _isRepeat = !_isRepeat),
+                        isShuffle: isShuffle,
+                        repeatMode: repeatMode,
+                        onPlayPause: () => isPlaying ? ctrl.pause() : ctrl.resume(),
+                        onNext: () => ctrl.skipToNext(),
+                        onPrev: () => ctrl.skipToPrevious(),
+                        onShuffle: () => ctrl.toggleShuffle(),
+                        onRepeat: () => ctrl.toggleRepeat(),
                       ),
                       const SizedBox(height: 40),
                     ],
@@ -321,12 +352,13 @@ class _SeekBar extends StatelessWidget {
 
 class _IconBar extends StatelessWidget {
   final bool isFavorited;
-  final VoidCallback onFavourite, onLyrics, onQueue;
+  final VoidCallback onFavourite, onLyrics, onQueue, onSave;
   const _IconBar({
     required this.isFavorited,
     required this.onFavourite,
     required this.onLyrics,
     required this.onQueue,
+    required this.onSave,
   });
 
   @override
@@ -340,7 +372,7 @@ class _IconBar extends StatelessWidget {
             onTap: onFavourite,
           ),
           _IconAction(icon: Icons.lyrics_outlined, label: 'Lyrics', onTap: onLyrics),
-          _IconAction(icon: Icons.download_for_offline_outlined, label: 'Save', onTap: () {}),
+          _IconAction(icon: Icons.download_for_offline_outlined, label: 'Save', onTap: onSave),
           _IconAction(icon: Icons.queue_music_rounded, label: 'Queue', onTap: onQueue),
         ],
       );
@@ -379,17 +411,20 @@ class _IconAction extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _ControlRow extends StatelessWidget {
-  final bool isPlaying, isLoading, isShuffle, isRepeat;
-  final VoidCallback onPlayPause, onShuffle, onRepeat;
+  final bool isPlaying, isLoading, isShuffle;
+  final AudioServiceRepeatMode repeatMode;
+  final VoidCallback onPlayPause, onShuffle, onRepeat, onNext, onPrev;
 
   const _ControlRow({
     required this.isPlaying,
     required this.isLoading,
     required this.isShuffle,
-    required this.isRepeat,
+    required this.repeatMode,
     required this.onPlayPause,
     required this.onShuffle,
     required this.onRepeat,
+    required this.onNext,
+    required this.onPrev,
   });
 
   @override
@@ -408,12 +443,12 @@ class _ControlRow extends StatelessWidget {
             onPressed: onShuffle,
           ),
 
-          // Previous — stub (Phase 6)
+          // Previous
           IconButton(
             iconSize: 36,
             icon: const Icon(Icons.skip_previous_rounded,
                 color: AppColors.onSurface),
-            onPressed: null,
+            onPressed: onPrev,
           ),
 
           // Play / Pause — 72dp neon circle
@@ -447,20 +482,22 @@ class _ControlRow extends StatelessWidget {
             ),
           ),
 
-          // Next — stub (Phase 6)
+          // Next
           IconButton(
             iconSize: 36,
             icon: const Icon(Icons.skip_next_rounded,
                 color: AppColors.onSurface),
-            onPressed: null,
+            onPressed: onNext,
           ),
 
           // Repeat
           IconButton(
             iconSize: 26,
             icon: Icon(
-              Icons.repeat_rounded,
-              color: isRepeat
+              repeatMode == AudioServiceRepeatMode.one
+                  ? Icons.repeat_one_rounded
+                  : Icons.repeat_rounded,
+              color: repeatMode != AudioServiceRepeatMode.none
                   ? AppColors.primary
                   : AppColors.onSurfaceMuted.withValues(alpha: 0.45),
             ),

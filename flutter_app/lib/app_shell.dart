@@ -16,6 +16,7 @@ import 'features/media/presentation/full_player_page.dart';
 import 'features/media/presentation/video_player_page.dart';
 import 'features/media/shared/media_session_orchestrator.dart';
 import 'features/media/video/video_player_controller.dart';
+import 'core/constants/app_constants.dart';
 
 // ---------------------------------------------------------------------------
 // App Root — sets up MaterialApp.router + theme
@@ -27,7 +28,7 @@ class AppShell extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
-      title: 'Saimum Music',
+      title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.dark,
       routerConfig: ref.watch(routerProvider),
@@ -175,7 +176,7 @@ class _BottomNav extends ConsumerWidget {
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: NavigationBar(
-          height: 56,
+          height: 80,
           backgroundColor: AppColors.glassFill,
           surfaceTintColor: Colors.transparent,
           indicatorColor: AppColors.primary.withValues(alpha: 0.18),
@@ -225,7 +226,7 @@ class _MiniPlayer extends ConsumerWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 30, sigmaY: 30),
           child: Container(
-            height: 72,
+            constraints: const BoxConstraints(minHeight: 72, maxHeight: 88),
             decoration: BoxDecoration(
               color: AppColors.background.withValues(alpha: 0.80),
               border: const Border(

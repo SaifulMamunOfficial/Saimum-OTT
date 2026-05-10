@@ -18,6 +18,7 @@ class NowPlayingItem {
   final String? artist;
   final String? artworkUrl;
   final String sourceUrl;
+  final Map<String, dynamic>? extras;
 
   const NowPlayingItem({
     required this.id,
@@ -25,6 +26,7 @@ class NowPlayingItem {
     required this.sourceUrl,
     this.artist,
     this.artworkUrl,
+    this.extras,
   });
 }
 

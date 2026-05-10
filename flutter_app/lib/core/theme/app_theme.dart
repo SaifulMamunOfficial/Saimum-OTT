@@ -32,9 +32,9 @@ abstract final class AppTheme {
         displayColor: AppColors.onSurface,
       ),
 
-      // AppBar — fully transparent, system overlay on status bar
+      // AppBar — solid background, system overlay on status bar
       appBarTheme: AppBarTheme(
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColors.background,
         elevation: 0,
         systemOverlayStyle: SystemUiOverlayStyle.light.copyWith(
           statusBarColor: Colors.transparent,

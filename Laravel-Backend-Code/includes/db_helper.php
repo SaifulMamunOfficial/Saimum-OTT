@@ -23,7 +23,8 @@ if($_SERVER['HTTP_HOST']=="localhost" or $_SERVER['HTTP_HOST']=="192.168.1.125")
 	DEFINE ('DB_NAME', 'saimumba_music');
 }
 
-$mysqli =mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME);
+$port = ($_SERVER['HTTP_HOST']=="localhost" or $_SERVER['HTTP_HOST']=="192.168.1.125") ? 3306 : 3306;
+$mysqli = mysqli_connect(DB_HOST,DB_USER,DB_PASSWORD,DB_NAME, $port);
 
 if ($mysqli->connect_errno) {
 	echo "Failed to connect to MySQL: (" . $mysqli->connect_errno . ") " . $mysqli->connect_error;

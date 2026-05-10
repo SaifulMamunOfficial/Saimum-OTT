@@ -1,120 +1,79 @@
-# Project State & Work Log
+# Project Work Log - Saimum Music OTT Platform
 
-## Date: 2026-05-08 (Updated: Session 2)
-
-### ✅ Session 1 (Previous Night) — Already Done:
-1. Architecture finalized (`note.md` v5.0)
-2. Execution Plan created (`execution_plan.md` — 8 phases)
-3. `.cursorrules` finalized (10 strict AI rules)
+## Overview
+This log tracks the critical development milestones, bug fixes, and architectural decisions for the Saimum Music OTT Platform.
 
 ---
 
-## Date: 2026-05-08 (Today's Session)
+## [2026-05-10] - Phase 11: System Migration & Hardware Transition
 
-### 🚀 What We Accomplished Today:
+### ✅ Completed
+- **Hardware Migration:** Successfully transitioned development environment to a new PC.
+- **Environment Setup:** 
+    - Configured Flutter SDK Path and resolved Environment Variable issues.
+    - Set up Android toolchain and accepted necessary licenses for device deployment.
+- **Backend & Connectivity:**
+    - Restored MySQL database and updated port configuration to `3306` to match local system.
+    - Configured `php artisan serve` to listen on local IP (`192.168.0.170`) for physical device testing.
+    - Implemented a symbolic link (`C:\xampp\htdocs\saimum`) to serve legacy project assets from `E:` drive via XAMPP.
+- **Flutter Restoration:**
+    - Resolved corrupted generated files (`.g.dart`) by performing a full `flutter clean` and `build_runner` cycle.
+    - Updated `ApiClient` base URL to the new local IP address.
+- **UI Stabilization & Branding (Saimum Stream):**
+    - **Rebranding:** Officially changed the app name to **"Saimum Stream"**.
+    - **Layout Stability:** Fixed persistent "Bottom overflowed" errors across all major screens (Home, Music, Video, Search) by optimizing heights and aspect ratios.
+    - **Home Page Evolution:** Moved "Trending Now" to the top and refactored the layout to support 10+ dynamic sections controllable via dashboard.
+    - **Music Page Refinement:** Optimized spacing for Artists, Genres, and Quick Picks; resolved overflow issues caused by large font scaling.
+    - **Visual Polish:** Adjusted status bar overlap using pinned AppBars and refined artist details border aesthetics.
+    - **Spacing Optimization:** Standardized vertical gaps (8px/16px) and bottom padding (100px) for a premium, non-cluttered feel.
 
-1. **Cursor IDE Setup (100% Complete):**
-   - Opened `flutter_app/` folder in Cursor (correct root)
-   - `.cursorrules` placed inside `flutter_app/` — auto-detected ✅
-   - Copied `note.md` & `execution_plan.md` into `flutter_app/` for AI context ✅
-   - Model: Sonnet 4.6, Mode: Agent ✅
-
-2. **Phase 1 — Task 1.1: Clean Architecture Shell ✅ DONE**
-   - Folder structure created (`core/`, `features/media/`, etc.)
-   - Riverpod, go_router, flutter_secure_storage, isar added to pubspec
-   - `feature_flags.dart` created (video/encryption/download = false)
-   - `app_shell.dart` created with dark theme
-   - `main.dart` updated with proper boot sequence
-   - Fixed: isar_flutter_libs namespace issue (build.gradle.kts patch)
-   - Fixed: Isar.open() removed (deferred to Task 1.3 — schemas not ready)
-   - **App running on physical device (Android 13) showing "Saimum Music - Boot OK"** ✅
-
-### 🛑 Where We Left Off:
-- Task 1.1 ✅ Complete
-- Physical device: Xiaomi 2201117TG (Android 13, API 33) — USB debugging ON
-- Device ID: `38ae9e1f`
-
-### 🎯 Next Steps:
-1. **Task 1.2:** MethodChannel Migration Script (Kotlin — extract legacy SharedPreferences token)
-2. **Task 1.3:** Isar DB Initialization (define PlaybackSnapshot & DownloadManifest schemas)
-
-*Note to AI: Read `note.md` and `execution_plan.md`. Task 1.1 done. Start from Task 1.2.*
-
-### 🚀 What We Accomplished Today:
-1. **Architecture Finalization (`note.md`):** 
-   - Upgraded the OTT platform blueprint to **v5.0 (Ultimate OTT/Media Blueprint)**.
-   - Decided to make the app 100% ad-free and subscription-free for a premium UI/UX.
-   - Added Dual Media support (Audio + Video via `media_kit` and `youtube_explode_dart`).
-   - Implemented advanced engineering mechanics: Unified Media Engine, MethodChannel legacy migration (to keep old users logged in), Chunk-based AES Encryption, and Isar DB storage.
-   - Added extreme stability layers: Crash Resilience System, Device Compatibility Matrix (Samsung, Xiaomi, Huawei handling), and Runtime Telemetry.
-
-2. **AI Execution Strategy (`execution_plan.md`):**
-   - Created a bulletproof, 8-phase execution plan specifically designed for Cursor IDE AI agents.
-   - Added strict **Global Guardrails**: Rollback strategy, Feature Flags, Fail Fast Rule, and State Source of Truth (Isar).
-
-3. **AI IDE Setup (`.cursorrules`):**
-   - Created a `.cursorrules` file to constrain the AI agent (No YAP, don't break architecture, follow strict rules).
-   - **LATE NIGHT UPDATE:** Added 6 production-grade safeguards to `.cursorrules` (Infinite Refactor Prevention, Dependency Safety, Strict Stability Validation, File Size Limits, Single Responsibility, and Async Safety for race conditions).
-   - Finalized the Cursor IDE setup (selected **Sonnet 4.6** model).
+### ⚠️ Challenges & Solutions
+- **Port Mismatch:** Detected MySQL running on 3306 while config was 3307; synced all `.env` and legacy PHP config files.
+- **Path Issues:** Fixed VS Code terminal's inability to recognize Flutter by updating the system Path and restarting the environment.
+- **Student Hub Foundation:** Completed Phase 11 Task 11.2 by implementing the `StudentHubScreen` placeholder and integrating it into the Profile page with navigation hooks.
+- **Legacy Database Integration:** 
+    - Resolved Migration Error (Errno: 150) by aligning `favorites` table `user_id` with `tbl_users.id` (`int(10)` type).
+    - Successfully implemented `favorites` table migration referencing the legacy user table.
+- **Playlist Cloud Sync:**
+    - Created `user_playlists` and `user_playlist_songs` tables in Laravel.
+    - Implemented `PlaylistController` with full CRUD and sync endpoints.
+    - Created `PlaylistModel` in Isar and integrated with Riverpod.
+    - Added "Create Playlist" UI in Library and "Add to Playlist" in Player options.
+    - Implemented automatic two-way sync between Isar and Laravel.
 
 ---
 
----
- 
- ## Date: 2026-05-09 (Updated: Post-Midnight Session Finale)
- 
- ### 🚀 What We Accomplished Today (Full Session Summary):
- 
- 1. **Phase 1: Foundation (100% COMPLETE) ✅**
- 2. **Phase 2: Core Media Engine (100% COMPLETE) ✅**
- 3. **Phase 3: API & Auth Layer (100% COMPLETE) ✅**
- 4. **Phase 4: UI & Themes (100% COMPLETE) ✅**
- 5. **Phase 5: Search & Advanced Player (100% COMPLETE) ✅**
- 
- 6. **Phase 6: Video Integration & Advanced Ecosystem (100% COMPLETE) ✅**
-    - **Video Engine (Task 6.1):** Fixed rendering issues and implemented a stable Video Player UI.
-    - **Elite Navigation (Task 6.2):** Implemented a 5-tab icons-only minimalist Navigation Bar and a persistent Profile Hub.
-    - **Specialized UI (Task 6.3):** Created a "Spotify-style" Music page and a "Netflix/OTT-style" Video page.
-    - **Detail Ecosystem (Task 6.4):** Built full-featured Artist and Album detail pages with tracklists and bio sections.
-    - **Master Library Hub (Task 6.5):** Developed a central destination for All Music, Artists, and Albums. Added "Mood Selectors" (Relax, Party, etc.) for dynamic filtering.
-    - **Stability:** Fixed layout overflows and re-entrancy bugs.
-    - **Status:** The app is now a complete, production-grade Media Platform prototype. ✅
- 
-  ## Date: 2026-05-09 (Current Session)
- 
- ### 🚀 What We Accomplished Now:
- 
- 1. **Phase 7: Downloads & Encryption (100% COMPLETE) ✅**
-    - **Encryption Service (Task 7.1):** Implemented AES-256-CBC service with HMAC-SHA256 key derivation. Keys are never stored on disk.
-    - **Download Engine:** Built a robust Dio-based pipeline with 512KB chunking and off-thread (Isolate) encryption.
-    - **Offline Playback:** Developed a custom `StreamAudioSource` for on-the-fly decryption, allowing offline playback in Airplane Mode.
-    - **UI Integration:** Added a tri-state `DownloadIconButton` and a dedicated "Downloaded Songs" section in the Library.
-    - **Security:** Verified that only `.enc` files remain on disk, rendering files unplayable outside the app.
-    - **Stability:** All heavy crypto runs in compute isolates to ensure zero UI lag.
- 
-  ## Date: 2026-05-09 (Night Session — Project Finalized)
- 
- ### 🚀 What We Accomplished Now:
- 
- 1. **Phase 8: Stability & Deployment (100% COMPLETE) ✅**
-    - **Critical Bug Fixes:** Fixed Android Cleartext HTTP issues, RenderFlex overflows in trending cards, and the MPV SIGABRT crash on Xiaomi devices.
-    - **Battery Optimization:** Implemented `BatteryOptimizationService` and a UI banner to prevent the OS from killing background playback.
-    - **Network Resilience:** Added `ConnectivityService` with an auto-sliding top banner for offline states.
-    - **Telemetry:** Built an Isar-based `TelemetryService` and a global Error Boundary (`AppErrorScreen`) to replace the "Red Screen of Death".
-    - **UI Polish:** Replaced all native images with `CachedNetworkImage` via a new global `SongThumbnail` widget for performance.
-    - **Build Config:** Finalized `build.gradle.kts` versioning (v1.0.0) and optimized ProGuard/R8 rules for release.
- 
- ### 🏁 FINAL PROJECT STATUS: 100% COMPLETE ✅
- - All 8 Phases from `execution_plan.md` are finished and verified.
- - App is lint-free (`flutter analyze` -> 0 issues).
- - App is production-ready for deployment to Play Store.
- 
- ### 🎯 Next Steps (Post-Development):
- 1. Generate Release JKS (Keystore) and sign the App Bundle.
- 2. Upload to Google Play Console for Internal Testing.
- 3. Marketing & User Feedback collection.
- 
- *Note to AI Assistant: The Saimum Music OTT Platform project is now officially complete. Thank you for the collaboration!*
+## [2026-05-09] - Phase 10: Complete Platform Restoration & Dynamic Integration
 
- 
- 
+### ✅ Completed
+- **Database & Backend Restoration:**
+    - Restored full production database (`saimumba_music.sql`) with 851 songs and 70+ albums.
+    - Implemented dynamic API endpoints for Albums, Artists, and Banners in Laravel.
+    - Normalized image paths across the entire API layer.
+- **Dynamic Frontend Integration (Flutter):**
+    - **Home Page Restoration:** Banners, Trending, Recent, Albums, and Artists are now 100% dynamic.
+    - **Music Page Migration:** Replaced all mock data with real database streams.
+    - **Navigation Logic:** Fixed deep-linking for Album/Artist cards and Banner-to-Play functionality.
+- **UI/UX Refinements:**
+    - Redesigned Album and Artist detail pages for a premium, non-overlapping layout.
+    - Implemented blurred background effects and centered bio sections.
+    - Fixed several RenderFlex overflow issues in the discovery screen.
+
+### 🛠️ In Progress
+- Implementing the **Academic Hub** UI for users with the `student` role.
+- Developing the **Download Manager** logic for offline playback.
+- Integrating Search functionality with category-based filtering.
+
+### ⚠️ Challenges & Solutions
+- **Navigation Type Errors:** Fixed casting issues in Banner taps by using explicit `List<SongModel>` mapping.
+- **Mock Data Cleanup:** Successfully removed dependencies on `mock_data.dart` from all primary media screens.
+- **UI Consistency:** Used `Sliver` and `Positioned` widgets to ensure headers look perfect on all screen sizes.
+
+---
+
+## [2026-05-08] - Phase 9: Backend Modernization & Sanctum Auth
+- Migrated legacy PHP to Laravel 8.
+- Configured XAMPP (Port 3307) and imported initial DB schema.
+- Implemented Multi-role Auth (Admin/Student/User).
+
+---

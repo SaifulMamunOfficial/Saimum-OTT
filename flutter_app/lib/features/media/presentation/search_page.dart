@@ -7,6 +7,7 @@ import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/glass_card.dart';
+import '../../../core/widgets/song_play_count_row.dart';
 import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../controllers/search_controller.dart';
@@ -62,10 +63,16 @@ class _SearchPageState extends ConsumerState<SearchPage> {
       keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
       physics: const BouncingScrollPhysics(),
       slivers: [
+        SliverAppBar(
+          pinned: true,
+          backgroundColor: AppColors.background,
+          toolbarHeight: 0.1,
+          elevation: 0,
+        ),
         // Header
         SliverToBoxAdapter(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 56, 20, 16),
+            padding: const EdgeInsets.fromLTRB(20, 20, 20, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -185,7 +192,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
           ),
         ],
 
-        const SliverToBoxAdapter(child: SizedBox(height: 120)),
+        const SliverToBoxAdapter(child: SizedBox(height: 160)),
       ],
     );
   }
@@ -373,7 +380,7 @@ class _VideoDiscoveryRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      height: 130,
+      height: 155,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -516,6 +523,12 @@ class _SongResultTile extends ConsumerWidget {
                         color: AppColors.onSurfaceMuted,
                       ),
                     ),
+                  const SizedBox(height: 4),
+                  SongPlayCountRow(
+                    totalViews: song.totalViews,
+                    iconSize: 12,
+                    fontSize: 11,
+                  ),
                 ],
               ),
             ),
@@ -535,6 +548,7 @@ class _SongResultTile extends ConsumerWidget {
                             title: song.title,
                             artist: song.artist,
                             artworkUrl: song.thumbnail,
+                            songId: song.id,
                           ),
                   padding: EdgeInsets.zero,
                   constraints: const BoxConstraints(),

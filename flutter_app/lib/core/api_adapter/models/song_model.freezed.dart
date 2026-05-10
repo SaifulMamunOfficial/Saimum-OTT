@@ -26,13 +26,13 @@ mixin _$SongModel {
   @JsonKey(name: 'audio_url')
   String get audioUrl => throw _privateConstructorUsedError;
   String get thumbnail => throw _privateConstructorUsedError;
-
-  /// Duration in seconds.
   int get duration => throw _privateConstructorUsedError;
-  @JsonKey(name: 'album')
   String? get album => throw _privateConstructorUsedError;
-  @JsonKey(name: 'genre')
   String? get genre => throw _privateConstructorUsedError;
+
+  /// From API `total_views` — streams / play count for UI.
+  @JsonKey(name: 'total_views')
+  int get totalViews => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -52,8 +52,9 @@ abstract class $SongModelCopyWith<$Res> {
       @JsonKey(name: 'audio_url') String audioUrl,
       String thumbnail,
       int duration,
-      @JsonKey(name: 'album') String? album,
-      @JsonKey(name: 'genre') String? genre});
+      String? album,
+      String? genre,
+      @JsonKey(name: 'total_views') int totalViews});
 }
 
 /// @nodoc
@@ -77,6 +78,7 @@ class _$SongModelCopyWithImpl<$Res, $Val extends SongModel>
     Object? duration = null,
     Object? album = freezed,
     Object? genre = freezed,
+    Object? totalViews = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -111,6 +113,10 @@ class _$SongModelCopyWithImpl<$Res, $Val extends SongModel>
           ? _value.genre
           : genre // ignore: cast_nullable_to_non_nullable
               as String?,
+      totalViews: null == totalViews
+          ? _value.totalViews
+          : totalViews // ignore: cast_nullable_to_non_nullable
+              as int,
     ) as $Val);
   }
 }
@@ -130,8 +136,9 @@ abstract class _$$SongModelImplCopyWith<$Res>
       @JsonKey(name: 'audio_url') String audioUrl,
       String thumbnail,
       int duration,
-      @JsonKey(name: 'album') String? album,
-      @JsonKey(name: 'genre') String? genre});
+      String? album,
+      String? genre,
+      @JsonKey(name: 'total_views') int totalViews});
 }
 
 /// @nodoc
@@ -153,6 +160,7 @@ class __$$SongModelImplCopyWithImpl<$Res>
     Object? duration = null,
     Object? album = freezed,
     Object? genre = freezed,
+    Object? totalViews = null,
   }) {
     return _then(_$SongModelImpl(
       id: null == id
@@ -187,6 +195,10 @@ class __$$SongModelImplCopyWithImpl<$Res>
           ? _value.genre
           : genre // ignore: cast_nullable_to_non_nullable
               as String?,
+      totalViews: null == totalViews
+          ? _value.totalViews
+          : totalViews // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -200,9 +212,10 @@ class _$SongModelImpl implements _SongModel {
       required this.artist,
       @JsonKey(name: 'audio_url') required this.audioUrl,
       required this.thumbnail,
-      required this.duration,
-      @JsonKey(name: 'album') this.album,
-      @JsonKey(name: 'genre') this.genre});
+      this.duration = 0,
+      this.album,
+      this.genre,
+      @JsonKey(name: 'total_views') this.totalViews = 0});
 
   factory _$SongModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$SongModelImplFromJson(json);
@@ -218,20 +231,22 @@ class _$SongModelImpl implements _SongModel {
   final String audioUrl;
   @override
   final String thumbnail;
-
-  /// Duration in seconds.
   @override
+  @JsonKey()
   final int duration;
   @override
-  @JsonKey(name: 'album')
   final String? album;
   @override
-  @JsonKey(name: 'genre')
   final String? genre;
+
+  /// From API `total_views` — streams / play count for UI.
+  @override
+  @JsonKey(name: 'total_views')
+  final int totalViews;
 
   @override
   String toString() {
-    return 'SongModel(id: $id, title: $title, artist: $artist, audioUrl: $audioUrl, thumbnail: $thumbnail, duration: $duration, album: $album, genre: $genre)';
+    return 'SongModel(id: $id, title: $title, artist: $artist, audioUrl: $audioUrl, thumbnail: $thumbnail, duration: $duration, album: $album, genre: $genre, totalViews: $totalViews)';
   }
 
   @override
@@ -249,13 +264,15 @@ class _$SongModelImpl implements _SongModel {
             (identical(other.duration, duration) ||
                 other.duration == duration) &&
             (identical(other.album, album) || other.album == album) &&
-            (identical(other.genre, genre) || other.genre == genre));
+            (identical(other.genre, genre) || other.genre == genre) &&
+            (identical(other.totalViews, totalViews) ||
+                other.totalViews == totalViews));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, title, artist, audioUrl,
-      thumbnail, duration, album, genre);
+      thumbnail, duration, album, genre, totalViews);
 
   @JsonKey(ignore: true)
   @override
@@ -278,9 +295,10 @@ abstract class _SongModel implements SongModel {
       required final String artist,
       @JsonKey(name: 'audio_url') required final String audioUrl,
       required final String thumbnail,
-      required final int duration,
-      @JsonKey(name: 'album') final String? album,
-      @JsonKey(name: 'genre') final String? genre}) = _$SongModelImpl;
+      final int duration,
+      final String? album,
+      final String? genre,
+      @JsonKey(name: 'total_views') final int totalViews}) = _$SongModelImpl;
 
   factory _SongModel.fromJson(Map<String, dynamic> json) =
       _$SongModelImpl.fromJson;
@@ -297,15 +315,16 @@ abstract class _SongModel implements SongModel {
   @override
   String get thumbnail;
   @override
-
-  /// Duration in seconds.
   int get duration;
   @override
-  @JsonKey(name: 'album')
   String? get album;
   @override
-  @JsonKey(name: 'genre')
   String? get genre;
+  @override
+
+  /// From API `total_views` — streams / play count for UI.
+  @JsonKey(name: 'total_views')
+  int get totalViews;
   @override
   @JsonKey(ignore: true)
   _$$SongModelImplCopyWith<_$SongModelImpl> get copyWith =>

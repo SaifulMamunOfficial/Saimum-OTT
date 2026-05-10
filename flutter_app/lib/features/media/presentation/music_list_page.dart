@@ -7,9 +7,12 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_play_count_row.dart';
 import '../../../core/widgets/song_thumbnail.dart';
+import '../controllers/home_controller.dart';
 import '../controllers/media_controller.dart';
 import '../shared/download_icon_button.dart';
+import '../../../core/api_adapter/home_repository.dart';
 
 // ---------------------------------------------------------------------------
 // Genre palette
@@ -46,78 +49,97 @@ class MusicListPage extends ConsumerStatefulWidget {
 class _MusicListPageState extends ConsumerState<MusicListPage> {
   String? _mood;
 
-  List<SongModel> _filtered(Iterable<SongModel> src) {
-    if (_mood == null) return src.toList();
-    final tags = _kMoodMap[_mood]!;
-    final res =
-        src.where((s) => tags.contains(s.genre)).toList();
-    return res.isEmpty ? src.toList() : res;
-  }
-
   @override
   Widget build(BuildContext context) {
-    final topCharts = _filtered(kMockSongs.take(5));
-    final newReleases = _filtered(kMockSongs.reversed.take(5));
-    final quickPicks = _filtered(kMockSongs).take(6).toList();
+    final homeAsync = ref.watch(homeDataProvider);
 
-    return CustomScrollView(
-      physics: const BouncingScrollPhysics(),
-      slivers: [
-        // ── Header ──────────────────────────────────────────────────────────
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 64, 20, 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text('Music',
-                    style: TextStyle(
-                        fontSize: 30,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.onSurface,
-                        letterSpacing: -0.7)),
-                Text('${kMockSongs.length} songs',
-                    style: const TextStyle(
-                        fontSize: 13, color: AppColors.onSurfaceMuted)),
-              ],
+    return homeAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text('Error: $err', style: const TextStyle(color: Colors.white))),
+      data: (data) {
+        final trending = (data['music_trending'] as List).cast<SongModel>();
+        final recent = (data['music_recent'] as List).cast<SongModel>();
+        final artists = data['artists'] as List;
+        
+        final quickPicks = trending.take(6).toList();
+
+        return CustomScrollView(
+          physics: const BouncingScrollPhysics(),
+          slivers: [
+            SliverAppBar(
+              pinned: true,
+              backgroundColor: AppColors.background,
+              toolbarHeight: 0.1,
+              elevation: 0,
             ),
-          ),
-        ),
+            // ── Header ──────────────────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Music',
+                        style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.onSurface,
+                            letterSpacing: -0.7)),
+                    Text('${trending.length + recent.length} songs',
+                        style: const TextStyle(
+                            fontSize: 13, color: AppColors.onSurfaceMuted)),
+                  ],
+                ),
+              ),
+            ),
 
-        // ── Mood Chips ───────────────────────────────────────────────────────
-        SliverToBoxAdapter(
-          child: _MoodChips(
-            selected: _mood,
-            onSelect: (m) => setState(
-                () => _mood = _mood == m ? null : m),
-          ),
-        ),
-        const SliverToBoxAdapter(child: SizedBox(height: 22)),
+            // ── Mood Chips ───────────────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _MoodChips(
+                selected: _mood,
+                onSelect: (m) => setState(
+                    () => _mood = _mood == m ? null : m),
+              ),
+            ),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-        // ── Genre circles ────────────────────────────────────────────────────
-        const SliverToBoxAdapter(child: _GenreCircles()),
-        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            // ── Genre circles ────────────────────────────────────────────────────
+            const SliverToBoxAdapter(child: _GenreCircles()),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-        // ── Artists ──────────────────────────────────────────────────────────
-        const SliverToBoxAdapter(child: _SectionLabel('Artists')),
-        const SliverToBoxAdapter(child: _ArtistsRow()),
-        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            // ── Artists ──────────────────────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _SectionRow('Artists',
+                  onSeeAll: () => context.push('/all-artists')),
+            ),
+            SliverToBoxAdapter(child: _ArtistsRow(artists: artists)),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-        // ── Quick Picks (2×3 grid) ───────────────────────────────────────────
-        const SliverToBoxAdapter(child: _SectionLabel('Quick Picks')),
-        SliverToBoxAdapter(child: _QuickPicksGrid(songs: quickPicks)),
-        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            // ── Quick Picks (2×3 grid) ───────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _SectionRow('Quick Picks',
+                  onSeeAll: () => context.push('/all-songs')),
+            ),
+            SliverToBoxAdapter(child: _QuickPicksGrid(songs: quickPicks)),
 
-        // ── Top Charts (horizontal) ──────────────────────────────────────────
-        const SliverToBoxAdapter(child: _SectionLabel('Top Charts')),
-        SliverToBoxAdapter(child: _HorizontalMusicRow(songs: topCharts)),
-        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+            // ── Top Charts (horizontal) ──────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _SectionRow('Top Charts',
+                  onSeeAll: () => context.push('/all-songs')),
+            ),
+            SliverToBoxAdapter(child: _HorizontalMusicRow(songs: trending)),
+            const SliverToBoxAdapter(child: SizedBox(height: 8)),
 
-        // ── New Releases (horizontal) ────────────────────────────────────────
-        const SliverToBoxAdapter(child: _SectionLabel('New Releases')),
-        SliverToBoxAdapter(child: _HorizontalMusicRow(songs: newReleases)),
-        const SliverToBoxAdapter(child: SizedBox(height: 120)),
-      ],
+            // ── New Releases (horizontal) ────────────────────────────────────────
+            SliverToBoxAdapter(
+              child: _SectionRow('New Releases',
+                  onSeeAll: () => context.push('/all-songs')),
+            ),
+            SliverToBoxAdapter(child: _HorizontalMusicRow(songs: recent)),
+            const SliverToBoxAdapter(child: SizedBox(height: 160)),
+          ],
+        );
+      },
     );
   }
 }
@@ -126,19 +148,36 @@ class _MusicListPageState extends ConsumerState<MusicListPage> {
 // Section label
 // ---------------------------------------------------------------------------
 
-class _SectionLabel extends StatelessWidget {
+class _SectionRow extends StatelessWidget {
   final String text;
-  const _SectionLabel(this.text);
+  final VoidCallback onSeeAll;
+  const _SectionRow(this.text, {required this.onSeeAll});
 
   @override
   Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-        child: Text(text,
-            style: const TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: AppColors.onSurface,
-                letterSpacing: -0.3)),
+        padding: const EdgeInsets.fromLTRB(20, 0, 12, 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(text,
+                style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.onSurface,
+                    letterSpacing: -0.3)),
+            TextButton(
+              onPressed: onSeeAll,
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('See All', style: TextStyle(fontSize: 12, color: AppColors.primary)),
+                  SizedBox(width: 4),
+                  Icon(Icons.arrow_forward_ios_rounded, size: 10, color: AppColors.primary),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
 }
 
@@ -152,7 +191,7 @@ class _GenreCircles extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 86,
+      height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -193,30 +232,31 @@ class _GenreCircles extends StatelessWidget {
 // ---------------------------------------------------------------------------
 
 class _ArtistsRow extends StatelessWidget {
-  const _ArtistsRow();
+  final List<dynamic> artists;
+  const _ArtistsRow({required this.artists});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 104,
+      height: 115,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: kMockArtists.length,
-        itemBuilder: (_, i) => _ArtistCircle(artist: kMockArtists[i]),
+        itemCount: artists.length,
+        itemBuilder: (_, i) => _ArtistCircle(artist: artists[i]),
       ),
     );
   }
 }
 
 class _ArtistCircle extends StatelessWidget {
-  final MockArtist artist;
+  final dynamic artist;
   const _ArtistCircle({required this.artist});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => context.go('/artist/${artist.id}'),
+      onTap: () => context.go('/artist/${artist['id']}'),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10),
         child: Column(
@@ -239,7 +279,7 @@ class _ArtistCircle extends StatelessWidget {
                   width: 68,
                   height: 68,
                   child: SongThumbnail(
-                    url: artist.imageUrl,
+                    url: artist['image'],
                     fallback: Container(
                       color: AppColors.surfaceOne,
                       child: const Icon(Icons.person_rounded,
@@ -252,7 +292,7 @@ class _ArtistCircle extends StatelessWidget {
             const SizedBox(height: 6),
             SizedBox(
               width: 72,
-              child: Text(artist.name,
+              child: Text(artist['name'],
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   textAlign: TextAlign.center,
@@ -361,7 +401,7 @@ class _QuickPicksGrid extends ConsumerWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 8,
           mainAxisSpacing: 8,
-          childAspectRatio: 3.4,
+          childAspectRatio: 2.15,
         ),
         itemCount: songs.length,
         itemBuilder: (_, i) => _QuickPickTile(song: songs[i]),
@@ -382,6 +422,7 @@ class _QuickPickTile extends ConsumerWidget {
             title: song.title,
             artist: song.artist,
             artworkUrl: song.thumbnail,
+            songId: song.id,
           ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(6),
@@ -415,14 +456,25 @@ class _QuickPickTile extends ConsumerWidget {
                 ),
                 const SizedBox(width: 10),
                 Expanded(
-                  child: Text(
-                    song.title,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.onSurface),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        song.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.onSurface),
+                      ),
+                      const SizedBox(height: 4),
+                      SongPlayCountRow(
+                          totalViews: song.totalViews,
+                          iconSize: 11,
+                          fontSize: 10.5),
+                    ],
                   ),
                 ),
                 DownloadIconButton(song: song, size: 20),
@@ -447,7 +499,7 @@ class _HorizontalMusicRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      height: 182,
+      height: 215,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -470,6 +522,7 @@ class _MusicCard extends ConsumerWidget {
             title: song.title,
             artist: song.artist,
             artworkUrl: song.thumbnail,
+            songId: song.id,
           ),
       child: Padding(
         padding: const EdgeInsets.only(right: 14),
@@ -477,6 +530,7 @@ class _MusicCard extends ConsumerWidget {
           width: 128,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               Stack(
                 children: [
@@ -513,18 +567,18 @@ class _MusicCard extends ConsumerWidget {
               const SizedBox(height: 2),
               GestureDetector(
                 onTap: () {
-                  final a = artistByName(song.artist);
-                  if (a != null) context.go('/artist/${a.id}');
+                  context.push('/search?query=${song.artist}');
                 },
                 child: Text(song.artist,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 11,
-                        color: artistByName(song.artist) != null
-                            ? AppColors.primary
-                            : AppColors.onSurfaceMuted)),
+                        color: AppColors.primary)),
               ),
+              const SizedBox(height: 4),
+              SongPlayCountRow(
+                  totalViews: song.totalViews, iconSize: 11, fontSize: 10.5),
             ],
           ),
         ),

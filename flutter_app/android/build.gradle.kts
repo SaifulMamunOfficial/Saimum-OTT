@@ -14,6 +14,13 @@ subprojects {
                 if (androidExt.namespace == null) {
                     androidExt.namespace = project.group.toString().ifEmpty { "com.example.${project.name}" }
                 }
+                androidExt.compileSdk = 34
+            }
+        }
+        project.configurations.all {
+            resolutionStrategy {
+                force("androidx.core:core:1.12.0")
+                force("androidx.core:core-ktx:1.12.0")
             }
         }
     }

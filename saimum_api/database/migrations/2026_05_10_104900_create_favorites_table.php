@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateFavoritesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('favorites', function (Blueprint $table) {
+            $table->id();
+            $table->integer('user_id');
+            $table->foreign('user_id')->references('id')->on('tbl_users')->onDelete('cascade');
+            $table->unsignedBigInteger('post_id'); // Refers to Audio ID
+            $table->string('type')->default('audio');
+            $table->timestamps();
+
+            $table->unique(['user_id', 'post_id', 'type']);
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('favorites');
+    }
+}

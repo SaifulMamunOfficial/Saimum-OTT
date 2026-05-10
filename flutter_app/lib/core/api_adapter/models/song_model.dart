@@ -11,12 +11,12 @@ class SongModel with _$SongModel {
     required String artist,
     @JsonKey(name: 'audio_url') required String audioUrl,
     required String thumbnail,
-    /// Duration in seconds.
-    required int duration,
-    @JsonKey(name: 'album') String? album,
-    @JsonKey(name: 'genre') String? genre,
+    @Default(0) int duration,
+    String? album,
+    String? genre,
+    /// From API `total_views` — streams / play count for UI.
+    @JsonKey(name: 'total_views') @Default(0) int totalViews,
   }) = _SongModel;
 
-  factory SongModel.fromJson(Map<String, dynamic> json) =>
-      _$SongModelFromJson(json);
+  factory SongModel.fromJson(Map<String, dynamic> json) => _$SongModelFromJson(json);
 }

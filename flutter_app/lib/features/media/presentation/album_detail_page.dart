@@ -5,9 +5,15 @@ import 'package:go_router/go_router.dart';
 import '../../../core/api_adapter/mock_data.dart';
 import '../../../core/api_adapter/models/song_model.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/song_play_count_row.dart';
 import '../../../core/widgets/song_thumbnail.dart';
 import '../controllers/media_controller.dart';
 import '../shared/download_icon_button.dart';
+import '../../../core/api_adapter/home_repository.dart';
+
+final albumDetailsProvider = FutureProvider.family<Map<String, dynamic>, int>((ref, id) {
+  return ref.watch(homeRepositoryProvider).getAlbumDetails(id);
+});
 
 class AlbumDetailPage extends ConsumerWidget {
   final int albumId;
@@ -15,127 +21,129 @@ class AlbumDetailPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final album = albumById(albumId);
-    if (album == null) {
-      return Scaffold(
-        backgroundColor: AppColors.background,
-        appBar: AppBar(backgroundColor: AppColors.background),
-        body: const Center(
-          child: Text('Album not found',
-              style: TextStyle(color: AppColors.onSurfaceMuted)),
-        ),
-      );
-    }
-    final tracks = songsForAlbum(album.title);
+    final albumAsync = ref.watch(albumDetailsProvider(albumId));
 
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: CustomScrollView(
-        physics: const BouncingScrollPhysics(),
-        slivers: [
-          // ── Header ──────────────────────────────────────────────────────
-          SliverAppBar(
-            expandedHeight: 300,
-            pinned: true,
-            backgroundColor: AppColors.background,
-            leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                  color: AppColors.onSurface, size: 20),
-              onPressed: () => context.pop(),
-            ),
-            flexibleSpace: FlexibleSpaceBar(
-              title: Text(album.title,
-                  style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.onSurface)),
-              titlePadding:
-                  const EdgeInsetsDirectional.only(start: 72, bottom: 16),
-              background: _AlbumHeader(album: album, trackCount: tracks.length),
-            ),
-          ),
+    return albumAsync.when(
+      loading: () => const Scaffold(
+          backgroundColor: AppColors.background,
+          body: Center(child: CircularProgressIndicator())),
+      error: (err, stack) => Scaffold(
+          backgroundColor: AppColors.background,
+          body: Center(child: Text('Error: $err', style: const TextStyle(color: Colors.white)))),
+      data: (data) {
+        final album = data['album'];
+        final tracks = data['tracks'] as List<SongModel>;
 
-          // ── Play All button ──────────────────────────────────────────────
-          if (tracks.isNotEmpty)
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 4),
-                child: Row(
-                  children: [
-                    FilledButton.icon(
-                      onPressed: () =>
-                          ref.read(mediaControllerProvider.notifier).play(
+        return Scaffold(
+          backgroundColor: AppColors.background,
+          body: CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: [
+              // ── Header ──────────────────────────────────────────────────────
+              SliverAppBar(
+                expandedHeight: 300,
+                pinned: true,
+                backgroundColor: AppColors.background,
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white, size: 20),
+                  onPressed: () => context.pop(),
+                ),
+                flexibleSpace: FlexibleSpaceBar(
+                  background: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      SongThumbnail(url: album['image']),
+                      Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              AppColors.background.withValues(alpha: 0.5),
+                              AppColors.background,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 20,
+                        left: 20,
+                        right: 20,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              album['name'],
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w900,
+                                  color: Colors.white,
+                                  height: 1.1),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              album['artist'],
+                              style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.white70),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // ── Play All button ──────────────────────────────────────────────
+              if (tracks.isNotEmpty)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 4),
+                    child: Row(
+                      children: [
+                        FilledButton.icon(
+                          onPressed: () => ref
+                              .read(mediaControllerProvider.notifier)
+                              .play(
                                 tracks.first.audioUrl,
                                 title: tracks.first.title,
                                 artist: tracks.first.artist,
                                 artworkUrl: tracks.first.thumbnail,
+                                songId: tracks.first.id,
                               ),
-                      icon: const Icon(Icons.play_arrow_rounded, size: 20),
-                      label: const Text('Play All',
-                          style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 14)),
-                      style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.primary,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24)),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 24, vertical: 12),
-                      ),
+                          icon: const Icon(Icons.play_arrow_rounded, size: 22),
+                          label: const Text('Play All'),
+                          style: FilledButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 12),
-                    OutlinedButton.icon(
-                      onPressed: () {
-                        final artist = artistByName(album.artistName);
-                        if (artist != null) {
-                          context.go('/artist/${artist.id}');
-                        }
-                      },
-                      icon: const Icon(Icons.person_outline_rounded,
-                          size: 16, color: AppColors.primary),
-                      label: Text(album.artistName,
-                          style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600)),
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                            color: AppColors.primary.withValues(alpha: 0.5)),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(24)),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 10),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            ),
 
-          // ── Tracklist ────────────────────────────────────────────────────
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 20, 20, 8),
-              child: Text(
-                tracks.isEmpty
-                    ? 'No tracks found'
-                    : '${tracks.length} Track${tracks.length == 1 ? '' : 's'}',
-                style: const TextStyle(
-                    fontSize: 13, color: AppColors.onSurfaceMuted),
+              // ── Tracklist ────────────────────────────────────────────────────
+              SliverList.separated(
+                itemCount: tracks.length,
+                separatorBuilder: (_, _) => const SizedBox(height: 8),
+                itemBuilder: (_, i) => _TrackTile(song: tracks[i], index: i),
               ),
-            ),
-          ),
-          SliverList.separated(
-            itemCount: tracks.length,
-            separatorBuilder: (_, _) =>
-                const Divider(height: 1, color: AppColors.glassBorder),
-            itemBuilder: (_, i) =>
-                _TrackTile(song: tracks[i], index: i),
-          ),
 
-          const SliverToBoxAdapter(child: SizedBox(height: 120)),
-        ],
-      ),
+              const SliverToBoxAdapter(child: SizedBox(height: 120)),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -257,9 +265,17 @@ class _TrackTile extends ConsumerWidget {
               fontWeight: FontWeight.w600,
               fontSize: 14,
               color: AppColors.onSurface)),
-      subtitle: Text(song.artist,
-          style: const TextStyle(
-              fontSize: 12, color: AppColors.onSurfaceMuted)),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(song.artist,
+              style: const TextStyle(
+                  fontSize: 12, color: AppColors.onSurfaceMuted)),
+          const SizedBox(height: 4),
+          SongPlayCountRow(totalViews: song.totalViews, iconSize: 12, fontSize: 11),
+        ],
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -275,6 +291,7 @@ class _TrackTile extends ConsumerWidget {
             title: song.title,
             artist: song.artist,
             artworkUrl: song.thumbnail,
+            songId: song.id,
           ),
     );
   }

@@ -24,13 +24,19 @@ class VideoListPage extends ConsumerWidget {
     return CustomScrollView(
       physics: const BouncingScrollPhysics(),
       slivers: [
+        SliverAppBar(
+          pinned: true,
+          backgroundColor: AppColors.background,
+          toolbarHeight: 0.1,
+          elevation: 0,
+        ),
         // ── Featured Banner ──────────────────────────────────────────────────
         SliverToBoxAdapter(
           child: _FeaturedBanner(video: featured),
         ),
 
         // ── Trending Now ─────────────────────────────────────────────────────
-        const SliverToBoxAdapter(child: SizedBox(height: 28)),
+        const SliverToBoxAdapter(child: SizedBox(height: 16)),
         const SliverToBoxAdapter(child: _OttSectionLabel('Trending Now')),
         SliverToBoxAdapter(child: _OttRow(videos: trending)),
 
@@ -46,7 +52,7 @@ class VideoListPage extends ConsumerWidget {
           child: _CategoryBadges(),
         ),
 
-        const SliverToBoxAdapter(child: SizedBox(height: 120)),
+        const SliverToBoxAdapter(child: SizedBox(height: 160)),
       ],
     );
   }
@@ -251,7 +257,7 @@ class _OttRow extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return SizedBox(
-      height: 148,
+      height: 165,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),

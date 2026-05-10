@@ -5,12 +5,17 @@ import 'package:just_audio/just_audio.dart';
 
 class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
   final _player = AudioPlayer();
+  final _playlist = ConcatenatingAudioSource(children: []);
 
   SaimumAudioHandler() {
     _configureSession();
-    _player.playbackEventStream
-        .map(_buildPlaybackState)
-        .pipe(playbackState);
+    _player.playbackEventStream.map(_buildPlaybackState).pipe(playbackState);
+    
+    _player.currentIndexStream.listen((index) {
+      if (index != null && index < queue.value.length) {
+        mediaItem.add(queue.value[index]);
+      }
+    });
   }
 
   Future<void> _configureSession() async {
@@ -25,7 +30,6 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
       }
     });
 
-    // Pause on headphone unplug / Bluetooth disconnect
     session.becomingNoisyEventStream.listen((_) => _player.pause());
   }
 
@@ -37,7 +41,13 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
         MediaControl.stop,
         MediaControl.skipToNext,
       ],
-      systemActions: const {MediaAction.seek},
+      systemActions: const {
+        MediaAction.seek,
+        MediaAction.skipToNext,
+        MediaAction.skipToPrevious,
+        MediaAction.setShuffleMode,
+        MediaAction.setRepeatMode,
+      },
       androidCompactActionIndices: const [0, 1, 3],
       processingState: const {
         ProcessingState.idle: AudioProcessingState.idle,
@@ -51,38 +61,87 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
       bufferedPosition: _player.bufferedPosition,
       speed: _player.speed,
       queueIndex: event.currentIndex,
+      shuffleMode: _player.shuffleModeEnabled
+          ? AudioServiceShuffleMode.all
+          : AudioServiceShuffleMode.none,
+      repeatMode: switch (_player.loopMode) {
+        LoopMode.one => AudioServiceRepeatMode.one,
+        LoopMode.all => AudioServiceRepeatMode.all,
+        _ => AudioServiceRepeatMode.none,
+      },
     );
+  }
+
+  /// True when the underlying player is fully idle — used as a guard
+  /// in VideoPlayerController to skip redundant stop calls.
+  bool get isStopped =>
+      _player.processingState == ProcessingState.idle && !_player.playing;
+
+  @override
+  Future<void> addQueueItems(List<MediaItem> items) async {
+    final sources = items.map((item) => AudioSource.uri(
+      Uri.parse(item.id),
+      tag: item,
+    )).toList();
+    
+    await _playlist.addAll(sources);
+    final newQueue = queue.value..addAll(items);
+    queue.add(newQueue);
+  }
+
+  @override
+  Future<void> updateQueue(List<MediaItem> items) async {
+    await _playlist.clear();
+    final sources = items.map((item) => AudioSource.uri(
+      Uri.parse(item.id),
+      tag: item,
+    )).toList();
+    
+    await _playlist.addAll(sources);
+    queue.add(items);
+    
+    if (_player.audioSource == null || _player.audioSource != _playlist) {
+      await _player.setAudioSource(_playlist);
+    }
   }
 
   Future<void> playFromUrl(String url, {MediaItem? mediaItem}) async {
-    // Always publish metadata before loading so the notification has a title
-    this.mediaItem.add(
-      mediaItem ??
-          MediaItem(
-            id: url,
-            title: 'Saimum Music',
-            artist: 'Streaming',
-            album: 'Saimum Music',
-          ),
+    final item = mediaItem ?? MediaItem(
+      id: url,
+      title: 'Saimum Music',
+      artist: 'Streaming',
     );
-    await _player.setAudioSource(AudioSource.uri(Uri.parse(url)));
+
+    await updateQueue([item]);
     await _player.play();
   }
 
-  /// Plays from a custom [AudioSource] (e.g., [DecryptionAudioSource]).
-  /// Publishes [mediaItem] to the notification / lock screen.
   Future<void> playFromSource(AudioSource source, {MediaItem? mediaItem}) async {
-    this.mediaItem.add(
-      mediaItem ??
-          MediaItem(
-            id: 'offline',
-            title: 'Saimum Music',
-            artist: 'Offline',
-            album: 'Saimum Music',
-          ),
-    );
+    this.mediaItem.add(mediaItem ?? MediaItem(id: 'offline', title: 'Offline'));
     await _player.setAudioSource(source);
     await _player.play();
+  }
+
+  @override
+  Future<void> skipToNext() => _player.seekToNext();
+
+  @override
+  Future<void> skipToPrevious() => _player.seekToPrevious();
+
+  @override
+  Future<void> setShuffleMode(AudioServiceShuffleMode mode) async {
+    final enabled = mode != AudioServiceShuffleMode.none;
+    await _player.setShuffleModeEnabled(enabled);
+  }
+
+  @override
+  Future<void> setRepeatMode(AudioServiceRepeatMode mode) async {
+    final loopMode = switch (mode) {
+      AudioServiceRepeatMode.one => LoopMode.one,
+      AudioServiceRepeatMode.all => LoopMode.all,
+      _ => LoopMode.off,
+    };
+    await _player.setLoopMode(loopMode);
   }
 
   @override
@@ -91,22 +150,11 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
   @override
   Future<void> pause() => _player.pause();
 
-  /// True when the underlying player is fully idle — used as a guard
-  /// in VideoPlayerController to skip redundant stop calls.
-  bool get isStopped =>
-      _player.processingState == ProcessingState.idle && !_player.playing;
-
   @override
   Future<void> stop() async {
-    debugPrint('DEBUG: AudioHandler stop initiated');
     await _player.stop();
-    // 50ms flush window: lets playbackEventStream drain all pending events into
-    // the BehaviorSubject before super.stop() broadcasts its idle state and
-    // closes downstream listeners — eliminates "Bad state: cannot add to closed
-    // stream" RxDart re-entrancy.
     await Future<void>.delayed(const Duration(milliseconds: 50));
     await super.stop();
-    debugPrint('DEBUG: AudioHandler stop finished');
   }
 
   @override
@@ -114,10 +162,4 @@ class SaimumAudioHandler extends BaseAudioHandler with SeekHandler {
 
   @override
   Future<void> setSpeed(double speed) => _player.setSpeed(speed);
-
-  @override
-  Future<void> onTaskRemoved() async {
-    await _player.stop();
-    await super.onTaskRemoved();
-  }
 }

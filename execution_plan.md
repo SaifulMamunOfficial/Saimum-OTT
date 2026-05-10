@@ -140,3 +140,56 @@ All major features MUST be toggled via local variables during development.
 - [ ] **Task 8.1: Device Matrix & Telemetry**
   - **Action:** Add Battery Optimization dialogs for Samsung/Xiaomi. Setup Firebase Crashlytics and custom `playback_metrics.dart`.
   - **DoD:** Dropped frames and buffering duration are successfully logged in console/Firebase.
+
+---
+
+## Phase 9: Brand Experience & User Journey
+**Goal:** Create a premium first-impression and onboarding experience.
+
+- [x] **Task 9.1: Splash & Onboarding Flow**
+  - **Action:** Implement an animated Splash Screen and a 3-page high-end Onboarding screen (Music, Video, Student Hub).
+  - **DoD:** App boots to Splash, then Onboarding (first time only), then Main Shell.
+
+---
+
+## Phase 10: Real Laravel Integration & Legacy Migration
+**Goal:** Connect to the actual Laravel backend and migrate old sessions.
+
+- [/] **Task 10.1: Laravel API Adapter & Secure Auth UI**
+  - **Action:** Replace Mock API with real `LaravelApiAdapter`. Build Premium Login/Signup UI. Implement JWT token handling in `flutter_secure_storage`.
+  - **DoD:** Backend is ready (Sanctum). Flutter adapter configured. UI integration in progress.
+
+- [ ] **Task 10.2: Legacy Session Bridge (Task 1.2 revisited)**
+  - **Action:** Execute the Native Migration script to pull old session tokens from the legacy Java app.
+  - **DoD:** Users of the old app are automatically logged into the new Flutter app.
+
+---
+
+## Phase 11: Multi-Role Architecture & Student Hub Foundation
+**Goal:** Implement the foundation for Normal and Student roles.
+
+- [x] **Task 11.1: Role-Based User Model & Profile Redesign**
+  - **Action:** Update User model with `role` and `student_id`. Redesign Profile Hub to show role-specific information.
+  - **DoD:** Backend supports roles. Flutter UserModel updated. Profile UI integration pending.
+
+- [x] **Task 11.2: Student Hub Placeholder (Hook-only)**
+  - **Action:** Add a "Student Hub" section/tab that only appears for students. Add navigation hooks for future academic features.
+  - **DoD:** Students see the Hub (Coming Soon); normal users don't see it at all.
+
+---
+
+## Phase 12: Data Sync & Production Deployment
+**Goal:** Ensure all data is synced and prepare for Play Store.
+
+- [x] **Task 12.1: Cloud Sync (Playlist & Favorites)**
+  - [x] Backend: Create `user_playlists` & `favorites` tables.
+  - [x] Backend: API endpoints for CRUD + Sync.
+  - [x] Frontend: Isar local storage implementation.
+  - [x] Frontend: Background sync logic.
+
+- [x] **Task 12.2: Final Hardening & Release Build**
+  - [x] ProGuard rules verification.
+  - [x] Production log cleanup (print -> debugPrint).
+  - [x] Release build verification (APK generated successfully).
+  - [x] Fix: SDK 34 compatibility and Java 17 baseline alignment.
+
